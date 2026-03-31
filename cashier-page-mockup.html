@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeniusLaw - Cashier</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg-body:#f0f2f5;--bg-sidebar:#fff;--bg-card:#fff;--bg-card-hover:#f8f9fb;--bg-input:#fff;--bg-table-header:#f7f8fa;--bg-table-row-hover:#f0f4ff;--bg-dropdown:#fff;--border:#e2e6ed;--border-input:#d1d5dc;--border-focus:#3b82f6;--text-primary:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--blue-500:#3b82f6;--blue-600:#2563eb;--blue-50:#eff6ff;--blue-100:#dbeafe;--green-500:#22c55e;--green-50:#f0fdf4;--green-600:#16a34a;--green-bg:#dcfce7;--red-500:#ef4444;--red-50:#fef2f2;--red-bg:#fee2e2;--orange-500:#f97316;--orange-50:#fff7ed;--orange-bg:#ffedd5;--yellow-bg:#fef9c3;--shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow-lg:0 10px 30px rgba(0,0,0,.1);--sidebar-active-bg:#eff6ff;--sidebar-active-text:#3b82f6;--sidebar-text:#6b7280;--sidebar-section:#9ca3af;--tab-inactive-text:#6b7280;--scrollbar-track:#f1f1f1;--scrollbar-thumb:#c4c4c4;--modal-overlay:rgba(0,0,0,.45)}
+[data-theme=dark]{--bg-body:#0f1117;--bg-sidebar:#161822;--bg-card:#1a1d2b;--bg-card-hover:#222638;--bg-input:#1e2235;--bg-table-header:#1e2235;--bg-table-row-hover:#252a3d;--bg-dropdown:#1e2235;--border:#2a2e3f;--border-input:#353a50;--text-primary:#e5e7eb;--text-secondary:#9ca3af;--text-tertiary:#6b7280;--blue-50:#1e293b;--blue-100:#1e3a5f;--green-50:#0f2a1a;--green-bg:#14532d;--red-50:#2a1215;--red-bg:#450a0a;--orange-50:#2a1a0a;--orange-bg:#431a02;--yellow-bg:#422d00;--shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow-lg:0 10px 30px rgba(0,0,0,.5);--sidebar-active-bg:#1e293b;--sidebar-active-text:#60a5fa;--sidebar-text:#9ca3af;--sidebar-section:#6b7280;--tab-inactive-text:#9ca3af;--scrollbar-track:#1a1d2b;--scrollbar-thumb:#353a50;--modal-overlay:rgba(0,0,0,.7)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-body);color:var(--text-primary);display:flex;height:100vh;overflow:hidden;transition:background .25s,color .25s}
+.sidebar{width:200px;min-width:200px;background:var(--bg-sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;transition:background .25s,border-color .25s}.sidebar-logo{padding:16px 20px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}.sidebar-logo .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#3b82f6,#06b6d4);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px}.sidebar-logo span{font-weight:700;font-size:13px;color:var(--text-primary)}.sidebar-section{padding:16px 20px 6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--sidebar-section)}.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:13px;color:var(--sidebar-text);cursor:pointer;transition:all .15s;text-decoration:none;position:relative}.sidebar-item:hover{background:var(--bg-card-hover);color:var(--text-primary)}.sidebar-item.active{background:var(--sidebar-active-bg);color:var(--sidebar-active-text);font-weight:600}.sidebar-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--blue-500);border-radius:0 2px 2px 0}.sidebar-item svg{width:16px;height:16px;flex-shrink:0}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}.topbar{height:48px;background:var(--bg-sidebar);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;transition:background .25s,border-color .25s}.topbar-search{display:flex;align-items:center;gap:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:6px 14px;width:320px}.topbar-search svg{width:14px;height:14px;color:var(--text-tertiary)}.topbar-search input{border:none;outline:none;background:transparent;font-size:13px;color:var(--text-secondary);width:100%;font-family:inherit}.topbar-right{display:flex;align-items:center;gap:16px}.topbar-right .theme-toggle{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg-input);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);transition:all .15s}.topbar-right .theme-toggle:hover{border-color:var(--blue-500);color:var(--blue-500)}
+.content{flex:1;overflow-y:auto;padding:28px 32px}.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-track{background:var(--scrollbar-track)}.content::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:3px}.page-title{font-size:22px;font-weight:700;margin-bottom:4px}.page-subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:20px}
+.tabs-bar{display:flex;border-bottom:2px solid var(--border);margin-bottom:24px}.tab-btn{padding:10px 20px;font-size:13px;font-weight:500;color:var(--tab-inactive-text);background:none;border:none;cursor:pointer;position:relative;font-family:inherit;transition:color .15s}.tab-btn:hover{color:var(--text-primary)}.tab-btn.active{color:var(--blue-500);font-weight:600}.tab-btn.active::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--blue-500);border-radius:2px 2px 0 0}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;transition:all .25s}.stat-card .stat-label{font-size:11px;color:var(--text-secondary);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}.stat-card .stat-value{font-size:16px;font-weight:700}.stat-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center}.stat-icon svg{width:12px;height:12px}.stat-icon.blue{background:var(--blue-50);color:var(--blue-500)}.stat-icon.green{background:var(--green-50);color:var(--green-500)}.stat-icon.orange{background:var(--orange-50);color:var(--orange-500)}.stat-icon.red{background:var(--red-50);color:var(--red-500)}
+.payment-layout{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}.payment-form-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:24px;transition:all .25s}.form-section-title{font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:10px}.form-section-title .step-num{width:24px;height:24px;border-radius:50%;background:var(--blue-500);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.search-wrapper{position:relative;margin-bottom:20px}.search-input-group{display:flex;align-items:center;gap:10px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:10px;padding:10px 16px;transition:border-color .15s}.search-input-group:focus-within{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(59,130,246,.12)}.search-input-group svg{width:16px;height:16px;color:var(--text-tertiary);flex-shrink:0}.search-input-group input{border:none;outline:none;background:transparent;font-size:13px;color:var(--text-primary);width:100%;font-family:inherit}.search-input-group input::placeholder{color:var(--text-tertiary)}
+.search-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-dropdown);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);max-height:280px;overflow-y:auto;z-index:100;display:none}.search-dropdown.open{display:block}.dropdown-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}.dropdown-item:last-child{border-bottom:none}.dropdown-item:hover{background:var(--bg-table-row-hover)}.dropdown-item .avatar{width:36px;height:36px;border-radius:50%;background:var(--blue-100);color:var(--blue-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}.dropdown-item .item-info{flex:1;min-width:0}.dropdown-item .item-name{font-size:13px;font-weight:600}.dropdown-item .item-detail{font-size:11px;color:var(--text-secondary);margin-top:1px}.dropdown-item .item-state{font-size:12px;font-weight:600;color:var(--text-secondary)}
+.selected-client{display:none;align-items:center;gap:12px;background:var(--blue-50);border:1px solid var(--blue-500);border-radius:10px;padding:12px 16px;margin-bottom:20px}.selected-client.visible{display:flex}.selected-client .avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-500);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}.selected-client .client-info{flex:1}.selected-client .client-name{font-size:14px;font-weight:600}.selected-client .client-email{font-size:11px;color:var(--text-secondary)}.selected-client .btn-clear{width:28px;height:28px;border-radius:6px;border:none;background:transparent;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}.selected-client .btn-clear:hover{background:var(--red-bg);color:var(--red-500)}
+.order-section{display:none;margin-bottom:0}.order-section.visible{display:block}
+.order-search-wrapper{position:relative}.order-search-input{display:flex;align-items:center;gap:10px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:10px;padding:10px 16px;cursor:pointer;transition:border-color .15s}.order-search-input:focus-within{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(59,130,246,.12)}.order-search-input svg{width:16px;height:16px;color:var(--text-tertiary);flex-shrink:0}.order-search-input input{border:none;outline:none;background:transparent;font-size:13px;color:var(--text-primary);width:100%;font-family:inherit}.order-search-input input::placeholder{color:var(--text-tertiary)}
+.order-dropdown-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-dropdown);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);max-height:260px;overflow-y:auto;z-index:100;display:none}.order-dropdown-list.open{display:block}
+.order-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}.order-item:last-child{border-bottom:none}.order-item:hover{background:var(--bg-table-row-hover)}
+.order-item .oi-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.order-item .oi-icon svg{width:18px;height:18px}.order-item .oi-icon.fd{background:var(--blue-50);color:var(--blue-500)}.order-item .oi-icon.ep{background:var(--green-50);color:var(--green-500)}.order-item .oi-icon.ssdi{background:var(--orange-50);color:var(--orange-500)}
+.order-item .oi-info{flex:1;min-width:0}.order-item .oi-id{font-size:13px;font-weight:600}.order-item .oi-type{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.order-item .oi-balance{text-align:right;flex-shrink:0}.order-item .oi-bal-label{font-size:10px;color:var(--text-tertiary)}.order-item .oi-bal-amount{font-size:13px;font-weight:700}
+.selected-order{display:none;align-items:center;gap:12px;background:var(--blue-50);border:1px solid var(--blue-500);border-radius:10px;padding:12px 16px;margin-bottom:0}.selected-order.visible{display:flex}.selected-order .so-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.selected-order .so-icon svg{width:18px;height:18px}.selected-order .so-info{flex:1}.selected-order .so-id{font-size:13px;font-weight:600}.selected-order .so-type{font-size:11px;color:var(--text-secondary)}.selected-order .so-balance{font-size:12px;font-weight:600;color:var(--blue-500)}
+.add-card-item{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-top:2px solid var(--border);transition:background .1s;color:var(--blue-500)}.add-card-item:hover{background:var(--bg-table-row-hover)}.add-card-item svg{width:18px;height:18px}.add-card-item span{font-size:13px;font-weight:600}.styled-select,.order-dropdown{width:100%;padding:10px 16px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:10px;font-size:13px;color:var(--text-primary);font-family:inherit;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;transition:border-color .15s}.styled-select:focus,.order-dropdown:focus{border-color:var(--border-focus);outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}.form-group{margin-bottom:16px}.form-group label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px}.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:8px;font-size:13px;color:var(--text-primary);font-family:inherit;transition:border-color .15s}.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--border-focus);outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.12)}.form-group textarea{resize:vertical;min-height:72px}
+input[type=date]{width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:10px;font-size:13px;color:var(--text-primary);font-family:inherit;color-scheme:light}[data-theme=dark] input[type=date]{color-scheme:dark}input[type=date]:focus{border-color:var(--border-focus);outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s}.btn-primary{background:var(--blue-500);color:#fff}.btn-primary:hover{background:var(--blue-600)}.btn-outline{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--text-secondary);color:var(--text-primary)}.btn-danger{background:var(--red-500);color:#fff}.btn-danger:hover{background:#dc2626}.btn-warning{background:var(--orange-500);color:#fff}.btn-warning:hover{background:#ea580c}.form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
+.yn-toggle{display:flex}.yn-btn{padding:8px 24px;font-size:13px;font-weight:600;border:1px solid var(--border-input);background:var(--bg-input);cursor:pointer;color:var(--text-secondary);font-family:inherit;transition:all .15s}.yn-btn:first-child{border-radius:8px 0 0 8px}.yn-btn:last-child{border-radius:0 8px 8px 0;border-left:none}.yn-btn.active-yes{background:var(--blue-500);color:#fff;border-color:var(--blue-500)}.yn-btn.active-yes+.yn-btn{border-left-color:var(--blue-500)}.yn-btn.active-no{background:var(--bg-table-row-hover);color:var(--text-primary)}.schedule-date-section{display:none;margin-top:16px}.schedule-date-section.visible{display:block}
+.payment-summary{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;position:sticky;top:28px;transition:all .25s}.summary-title{font-size:11px;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:.8px;color:var(--text-tertiary)}.summary-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}.summary-row:last-of-type{border-bottom:none}.summary-row .label{color:var(--text-secondary)}.summary-row .value{font-weight:600;font-size:12px}.summary-row.total{font-size:14px;border-top:2px solid var(--border);margin-top:6px;padding-top:10px}.summary-row.total .value{color:var(--blue-500);font-size:14px}.summary-placeholder{text-align:center;padding:20px 0;color:var(--text-tertiary);font-size:12px}
+.table-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s}.table-toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}.table-toolbar .toolbar-left{display:flex;align-items:center;gap:12px}.table-toolbar .toolbar-search{display:flex;align-items:center;gap:8px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:8px;padding:7px 12px;width:240px}.table-toolbar .toolbar-search svg{width:14px;height:14px;color:var(--text-tertiary)}.table-toolbar .toolbar-search input{border:none;outline:none;background:transparent;font-size:12px;color:var(--text-primary);width:100%;font-family:inherit}.filter-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--border-input);background:var(--bg-input);font-size:12px;color:var(--text-secondary);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .15s}.filter-btn:hover{border-color:var(--blue-500);color:var(--blue-500)}
+table{width:100%;border-collapse:collapse}thead{background:var(--bg-table-header)}th{text-align:left;padding:10px 20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);border-bottom:1px solid var(--border)}td{padding:12px 20px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}tbody tr{cursor:pointer}tr:hover td{background:var(--bg-table-row-hover)}tr:last-child td{border-bottom:none}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--bg-card);border:1.5px solid}.badge-success{border-color:var(--green-500);color:var(--green-600)}.badge-pending{border-color:#F4C430;color:#F4C430}.badge-failed{border-color:var(--red-500);color:var(--red-500)}.badge-scheduled{border-color:#a21caf;color:#a21caf}
+[data-theme=dark] .badge{background:var(--bg-card)}
+[data-theme=dark] .badge-scheduled{border-color:#d946ef;color:#d946ef}
+[data-theme=dark] .badge-pending{border-color:#F4C430;color:#F4C430}
+[data-theme=dark] .badge-cancelled,[data-theme=dark] .badge-voided{border-color:#6b7280;color:#6b7280}
+.badge-refunded{border-color:var(--orange-500);color:var(--orange-500)}.badge-due-today{border-color:var(--orange-500);color:var(--orange-500)}.badge-voided{border-color:var(--text-tertiary);color:var(--text-tertiary)}.badge-cancelled{border-color:var(--text-tertiary);color:var(--text-tertiary)}
+.client-cell{display:flex;align-items:center;gap:10px}.client-cell .avatar-sm{width:30px;height:30px;border-radius:50%;background:var(--blue-100);color:var(--blue-500);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}.client-cell .cell-name{font-weight:500}.client-cell .cell-email{font-size:11px;color:var(--text-secondary)}.amount{font-weight:600;font-variant-numeric:tabular-nums}
+.table-footer{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 20px;border-top:1px solid var(--border);font-size:12px;color:var(--text-secondary)}.table-footer span{justify-self:start}.pagination{display:flex;align-items:center;gap:4px;justify-self:center}.pagination button{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);cursor:pointer;color:var(--text-secondary);font-size:12px;font-family:inherit;display:flex;align-items:center;justify-content:center}.pagination button:hover{border-color:var(--blue-500);color:var(--blue-500)}.pagination button.active{background:var(--blue-500);color:#fff;border-color:var(--blue-500)}
+.tab-panel{display:none}.tab-panel.active{display:block}.toggle-pills{display:flex;margin-bottom:12px}.toggle-pill{padding:6px 16px;font-size:12px;font-weight:600;border:1px solid var(--border-input);background:var(--bg-input);cursor:pointer;color:var(--text-secondary);font-family:inherit;transition:all .15s}.toggle-pill:first-child{border-radius:8px 0 0 8px}.toggle-pill:last-child{border-radius:0 8px 8px 0}.toggle-pill.active{background:var(--blue-500);color:#fff;border-color:var(--blue-500)}
+.payment-methods{display:flex;gap:10px;margin-bottom:16px}.pm-card{flex:1;padding:14px 16px;border:2px solid var(--border);border-radius:10px;cursor:pointer;text-align:center;transition:all .15s;background:var(--bg-input)}.pm-card:hover{border-color:var(--blue-500)}.pm-card.active{border-color:var(--blue-500);background:var(--blue-50)}.pm-card .pm-icon{margin-bottom:4px;display:flex;justify-content:center;align-items:center;height:28px}.pm-card .pm-icon svg{width:24px;height:24px;color:var(--text-secondary)}.pm-card.active .pm-icon svg{color:var(--blue-500)}.pm-card .pm-label{font-size:11px;font-weight:600;color:var(--text-secondary)}.pm-card.active .pm-label{color:var(--blue-500)}
+.date-group{margin-bottom:20px}.date-group-header{font-size:12px;font-weight:600;color:var(--text-secondary);padding:8px 0;margin-bottom:4px;display:flex;align-items:center;gap:8px}.date-dot{width:8px;height:8px;border-radius:50%}.date-dot.today{background:var(--orange-500)}.date-dot.upcoming{background:var(--blue-500)}.date-dot.past-due{background:var(--red-500)}
+.upcoming-card{display:flex;align-items:center;gap:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:8px;transition:all .15s;cursor:pointer}.upcoming-card:hover{border-color:var(--blue-500);box-shadow:var(--shadow-sm)}.upcoming-card .uc-avatar{width:38px;height:38px;border-radius:50%;background:var(--blue-100);color:var(--blue-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}.upcoming-card .uc-info{flex:1;min-width:0}.upcoming-card .uc-name{font-size:13px;font-weight:600}.upcoming-card .uc-order{font-size:11px;color:var(--text-secondary);margin-top:1px}.upcoming-card .uc-amount{font-size:15px;font-weight:700;text-align:right}.upcoming-card .uc-method{font-size:11px;color:var(--text-secondary);text-align:right;margin-top:1px}.upcoming-card .uc-badge{margin-left:12px}
+.styled-number{width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:10px;font-size:13px;color:var(--text-primary);font-family:inherit}.styled-number:focus{border-color:var(--border-focus);outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.firm-account-cards{display:flex;flex-direction:column;gap:8px}.firm-account-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:2px solid var(--border);border-radius:10px;cursor:pointer;background:var(--bg-input);transition:all .15s}.firm-account-card:hover{border-color:var(--blue-500)}.firm-account-card.active{border-color:var(--blue-500);background:var(--blue-50)}.firm-account-card .fa-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.firm-account-card .fa-icon svg{width:20px;height:20px}.firm-account-card .fa-icon.trust{background:var(--green-50);color:var(--green-500)}.firm-account-card .fa-icon.operating{background:var(--blue-50);color:var(--blue-500)}.firm-account-card .fa-info{flex:1}.firm-account-card .fa-name{font-size:13px;font-weight:600}.firm-account-card .fa-detail{font-size:11px;color:var(--text-secondary);margin-top:1px}.firm-account-card .fa-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}.firm-account-card.active .fa-check{border-color:var(--blue-500);background:var(--blue-500)}
+.saved-methods-section{display:none;margin-bottom:16px}.saved-methods-section.visible{display:block}.saved-method-cards{display:flex;flex-direction:column;gap:6px}.saved-method-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:10px;cursor:pointer;background:var(--bg-input);transition:all .15s}.saved-method-card:hover{border-color:var(--blue-500)}.saved-method-card.active{border-color:var(--blue-500);background:var(--blue-50)}.saved-method-card .sm-icon{flex-shrink:0;width:32px;display:flex;justify-content:center}.saved-method-card .sm-icon svg{width:20px;height:20px;color:var(--text-secondary)}.saved-method-card.active .sm-icon svg{color:var(--blue-500)}.saved-method-card .sm-info{flex:1}.saved-method-card .sm-label{font-size:13px;font-weight:600}.saved-method-card .sm-detail{font-size:11px;color:var(--text-secondary);margin-top:1px}.saved-method-card .sm-default{font-size:10px;font-weight:600;color:var(--blue-500);background:var(--blue-50);padding:2px 8px;border-radius:4px}.saved-method-card .sm-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}.saved-method-card.active .sm-radio{border-color:var(--blue-500);background:var(--blue-500)}.new-method-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--blue-500);cursor:pointer;margin-top:10px;padding:6px 0}.new-method-link:hover{opacity:.8}
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--modal-overlay);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}.modal-overlay.open{display:flex}.modal{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:modalIn .2s ease}.modal::-webkit-scrollbar{width:4px}.modal::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:2px}@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-header{display:flex;align-items:flex-start;justify-content:flex-end;padding:12px 16px 0}.modal-close{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);transition:all .15s}.modal-close:hover{border-color:var(--red-500);color:var(--red-500);background:var(--red-50)}
+.modal-body{padding:8px 24px 24px}
+.detail-fieldset{border:1px solid var(--border);border-radius:8px;padding:0;margin-bottom:20px;position:relative}.detail-fieldset-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary);background:var(--bg-card);padding:0 10px;position:absolute;top:-8px;left:16px}
+.detail-table{width:100%;border-collapse:collapse}.detail-table tr{border-bottom:1px solid var(--border)}.detail-table tr:last-child{border-bottom:none}.detail-table td{padding:11px 16px;font-size:13px;vertical-align:top}.detail-table td:first-child{font-weight:500;color:var(--text-secondary);width:140px;white-space:nowrap}.detail-table td:last-child{color:var(--text-primary);font-weight:400;word-break:break-all}
+.modal-footer{display:flex;gap:10px;justify-content:flex-start;padding:0 24px 24px}
+.btn-outline-danger{background:transparent;color:var(--red-500);border:1.5px solid var(--red-500);border-radius:8px;padding:8px 20px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}.btn-outline-danger:hover{background:var(--red-50)}
+.btn-outline-blue{background:transparent;color:var(--blue-500);border:1.5px solid var(--blue-500);border-radius:8px;padding:8px 20px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}.btn-outline-blue:hover{background:var(--blue-50)}
+/* Add card modal */
+.add-card-modal .modal{width:440px}.add-card-modal .modal-body{padding:20px 24px 8px}
+.add-card-modal .form-section-icon{width:48px;height:48px;border-radius:12px;background:var(--blue-50);color:var(--blue-500);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}.add-card-modal .form-section-icon svg{width:24px;height:24px}
+.add-card-modal h3{font-size:16px;font-weight:700;text-align:center;margin-bottom:4px}.add-card-modal .modal-subtitle{font-size:12px;color:var(--text-secondary);text-align:center;margin-bottom:20px}
+.card-form-group{margin-bottom:14px}.card-form-group label{display:block;font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}.card-form-group input,.card-form-group select{width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:8px;font-size:13px;color:var(--text-primary);font-family:inherit;transition:border-color .15s}.card-form-group input:focus,.card-form-group select:focus{border-color:var(--border-focus);outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.12)}.card-form-group input::placeholder{color:var(--text-tertiary)}
+.card-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card-form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.card-visual{background:linear-gradient(135deg,#1e3a5f,#3b82f6);border-radius:10px;padding:16px 20px;margin-bottom:18px;color:#fff;position:relative;overflow:hidden;min-height:90px}.card-visual::after{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08)}.card-visual .cv-number{font-size:15px;font-weight:600;letter-spacing:2px;margin-bottom:8px;font-family:monospace}.card-visual .cv-bottom{display:flex;justify-content:space-between;font-size:11px;opacity:.8}.card-visual .cv-label{font-size:9px;opacity:.6;margin-bottom:2px}
+.save-card-check{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:12px;color:var(--text-secondary)}.save-card-check input{width:16px;height:16px;accent-color:var(--blue-500)}
+.add-card-footer{display:flex;gap:10px;justify-content:flex-end;padding:16px 24px;border-top:1px solid var(--border)}
+/* Filter pills */
+.filter-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:0}.filter-pill{padding:5px 14px;font-size:12px;font-weight:500;border:1px solid var(--border);border-radius:6px;background:var(--bg-input);color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}.filter-pill:hover{border-color:var(--blue-500);color:var(--blue-500)}.filter-pill.active{background:var(--blue-500);color:#fff;border-color:var(--blue-500)}.filter-pill.active-success{background:var(--green-500);color:#fff;border-color:var(--green-500)}.filter-pill.active-failed{background:var(--red-500);color:#fff;border-color:var(--red-500)}.filter-pill.active-refunded{background:var(--orange-500);color:#fff;border-color:var(--orange-500)}.filter-pill.active-pending{background:#F4C430;color:#000;border-color:#F4C430}.filter-pill.active-scheduled{background:#c026d3;color:#fff;border-color:#c026d3}.filter-pill.active-pastdue{background:var(--red-500);color:#fff;border-color:var(--red-500)}.filter-pill.active-cancelled{background:var(--text-tertiary);color:#fff;border-color:var(--text-tertiary)}
+.txn-header-row{display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}.txn-count{font-size:11px;color:var(--text-secondary);line-height:1.3;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 20px;display:flex;align-items:center;gap:14px}.txn-count .txn-title{font-size:18px;font-weight:700;color:var(--text-primary)}.txn-count .txn-num{display:flex;flex-direction:column;align-items:center;border-left:1px solid var(--border);padding-left:14px}.txn-count strong{font-size:20px;font-weight:700;color:var(--text-primary)}
+/* Compact table */
+.compact-table td{padding:9px 20px;font-size:12.5px}.compact-table .cell-name{font-size:12.5px}.compact-table .cell-email{display:none}.compact-table .avatar-sm{width:26px;height:26px;font-size:9px}.compact-table .amount{font-size:12.5px}.compact-table th{padding:8px 20px;font-size:10px}
+.compact-table tbody tr.hidden-row{display:none}
+.client-link{color:var(--blue-500);font-weight:500;cursor:pointer}.client-link:hover{text-decoration:underline}
+/* Pills + total row */
+.pills-total-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:12px}
+/* Secondary filter row */
+.filter-row-secondary{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.filter-scope-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;font-weight:600;border:1px solid var(--border);border-radius:8px;background:var(--bg-input);color:var(--text-secondary);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
+.filter-scope-btn:hover{border-color:var(--blue-500);color:var(--blue-500)}
+.filter-scope-btn.scope-active{background:var(--blue-500);color:#fff;border-color:var(--blue-500)}
+.filter-scope-btn svg{width:14px;height:14px}
+.filter-search-combo{position:relative;display:flex;align-items:center;max-width:280px;opacity:1;transition:max-width .35s cubic-bezier(.4,0,.2,1),opacity .25s ease,margin .35s cubic-bezier(.4,0,.2,1);overflow:visible}
+.filter-search-combo .fsc-input{display:flex;align-items:center;gap:8px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:8px;padding:6px 12px;width:220px;transition:border-color .15s;cursor:text}
+.filter-search-combo .fsc-input:focus-within{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.filter-search-combo .fsc-input svg{width:13px;height:13px;color:var(--text-tertiary);flex-shrink:0}
+.filter-search-combo .fsc-input input{border:none;outline:none;background:transparent;font-size:12px;color:var(--text-primary);width:100%;font-family:inherit}
+.filter-search-combo .fsc-input input::placeholder{color:var(--text-tertiary)}
+.filter-search-combo .fsc-dropdown{position:absolute;top:calc(100% + 4px);left:0;min-width:280px;background:var(--bg-dropdown);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);max-height:220px;overflow-y:auto;z-index:100;display:none}
+.filter-search-combo .fsc-dropdown.open{display:block}
+.filter-search-combo.fsc-hidden{max-width:0;opacity:0;margin-left:0;margin-right:0;pointer-events:none;overflow:hidden}
+.fsc-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border);font-size:12px;transition:background .1s}
+.fsc-item:last-child{border-bottom:none}
+.fsc-item:hover{background:var(--bg-table-row-hover)}
+.fsc-item.active-item{background:var(--blue-50);color:var(--blue-500);font-weight:600}
+.fsc-item .fsc-icon{width:28px;height:28px;border-radius:6px;background:var(--blue-50);color:var(--blue-500);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.fsc-item .fsc-name{font-weight:500}
+.fsc-item .fsc-detail{font-size:10px;color:var(--text-tertiary)}
+.fsc-selected-tag{display:none;align-items:center;gap:6px;padding:4px 10px 4px 12px;background:var(--blue-50);border:1px solid var(--blue-500);border-radius:8px;font-size:11px;font-weight:600;color:var(--blue-500)}
+.fsc-selected-tag.visible{display:flex}
+.fsc-selected-tag .fsc-tag-clear{width:16px;height:16px;border-radius:4px;border:none;background:transparent;color:var(--blue-500);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
+.fsc-selected-tag .fsc-tag-clear:hover{background:var(--red-bg);color:var(--red-500)}
+.filter-divider{width:1px;height:24px;background:var(--border);margin:0 4px}
+/* Transaction total card */
+.txn-total-card{display:flex;align-items:center;justify-content:space-between;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 20px;flex-shrink:0;min-width:320px;gap:20px}.txn-total-card .ttc-left{display:flex;flex-direction:column;flex-shrink:0}.txn-total-card .ttc-label{font-size:11px;color:var(--text-secondary);font-weight:400}.txn-total-card .ttc-sublabel{font-size:13px;font-weight:700;margin-top:1px}.txn-total-card .ttc-value{font-size:22px;font-weight:700;white-space:nowrap;text-align:right}
+/* Decline tooltip */
+.decline-reason{position:relative;cursor:help}.decline-reason .dr-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text-primary);color:var(--bg-card);font-size:11px;font-weight:500;padding:6px 12px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:50}.decline-reason .dr-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text-primary)}.decline-reason:hover .dr-tooltip{opacity:1}
+/* Totals footer */
+.compact-table tfoot td{padding:10px 20px;font-size:12.5px;font-weight:700;border-top:2px solid var(--border);background:var(--bg-table-header)}
+/* Filter panel */
+.filter-panel-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--modal-overlay);z-index:900;display:none;align-items:flex-start;justify-content:center;padding-top:80px;backdrop-filter:blur(2px)}.filter-panel-overlay.open{display:flex}
+.filter-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;width:720px;max-width:95vw;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:modalIn .2s ease}
+.fp-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px}.fp-header h3{font-size:16px;font-weight:700}.fp-header .modal-close{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);transition:all .15s}.fp-header .modal-close:hover{border-color:var(--red-500);color:var(--red-500)}
+.fp-section{padding:0 24px 20px}.fp-section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text-tertiary);margin-bottom:10px}
+.fp-active-filters{display:flex;align-items:center;gap:6px;padding:0 24px 12px;flex-wrap:wrap}.fp-active-tag{display:flex;align-items:center;gap:4px;padding:3px 8px;background:var(--blue-50);border:1px solid var(--blue-500);border-radius:6px;font-size:10px;font-weight:600;color:var(--blue-500)}.fp-active-tag button{border:none;background:none;color:var(--blue-500);cursor:pointer;padding:0;font-size:10px;line-height:1}
+/* Date picker */
+.dp-range-input{display:flex;align-items:center;gap:8px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--text-primary);margin-bottom:12px;cursor:pointer}.dp-range-input svg{width:14px;height:14px;color:var(--text-tertiary)}
+.dp-layout{display:flex;gap:0}.dp-presets{width:160px;border-right:1px solid var(--border);padding-right:12px;flex-shrink:0}.dp-preset{display:block;width:100%;text-align:left;padding:6px 10px;font-size:11px;color:var(--text-secondary);border:none;background:none;cursor:pointer;border-radius:6px;font-family:inherit;transition:all .1s;margin-bottom:1px}.dp-preset:hover{background:var(--bg-table-row-hover);color:var(--text-primary)}.dp-preset.active{background:var(--blue-500);color:#fff}
+.dp-calendars{flex:1;padding-left:16px}.dp-cal-row{display:flex;gap:20px;margin-bottom:12px}
+.dp-cal{flex:1}.dp-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:12px;font-weight:600}.dp-cal-header button{border:none;background:none;cursor:pointer;color:var(--text-secondary);padding:4px;border-radius:4px}.dp-cal-header button:hover{background:var(--bg-table-row-hover)}
+.dp-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;text-align:center;font-size:11px}.dp-cal-grid .dp-day-label{font-size:10px;color:var(--text-tertiary);font-weight:600;padding:4px 0}.dp-cal-grid .dp-day{padding:5px 2px;border-radius:6px;cursor:pointer;color:var(--text-secondary);transition:all .1s}.dp-cal-grid .dp-day:hover{background:var(--blue-50);color:var(--blue-500)}.dp-cal-grid .dp-day.in-range{background:var(--blue-50)}.dp-cal-grid .dp-day.range-start,.dp-cal-grid .dp-day.range-end{background:var(--blue-500);color:#fff;font-weight:600}.dp-cal-grid .dp-day.today{border:1px solid var(--blue-500);font-weight:600;color:var(--blue-500)}.dp-cal-grid .dp-day.other-month{color:var(--text-tertiary);opacity:.4}
+.dp-footer{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:12px 0;border-top:1px solid var(--border);margin-top:8px;font-size:12px}.dp-footer .dp-range-text{flex:1;font-size:11px;color:var(--text-secondary)}.dp-footer button{padding:6px 16px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;border:1px solid var(--border);background:var(--bg-input);color:var(--text-secondary);transition:all .15s}.dp-footer button:hover{border-color:var(--blue-500);color:var(--blue-500)}.dp-footer button.dp-apply{background:var(--blue-500);color:#fff;border-color:var(--blue-500)}.dp-footer button.dp-apply:hover{background:var(--blue-600)}
+/* State multi-select */
+.state-select-wrap{position:relative}.state-select-input{display:flex;align-items:center;gap:8px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:8px;padding:8px 12px;cursor:pointer;transition:border-color .15s}.state-select-input:hover{border-color:var(--blue-500)}.state-select-input svg{width:13px;height:13px;color:var(--text-tertiary);flex-shrink:0}.state-select-input input{border:none;outline:none;background:transparent;font-size:12px;color:var(--text-primary);width:100%;font-family:inherit}.state-select-input input::placeholder{color:var(--text-tertiary)}
+.state-dd{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-dropdown);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);max-height:240px;overflow-y:auto;z-index:910;display:none}.state-dd.open{display:block}
+.state-dd-top{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border)}.state-dd-top button{font-size:11px;font-weight:600;color:var(--blue-500);background:none;border:none;cursor:pointer;font-family:inherit;padding:2px 6px;border-radius:4px}.state-dd-top button:hover{background:var(--blue-50)}
+.state-opt{display:flex;align-items:center;gap:8px;padding:6px 12px;font-size:12px;cursor:pointer;transition:background .1s}.state-opt:hover{background:var(--bg-table-row-hover)}.state-opt input{width:14px;height:14px;accent-color:var(--blue-500)}.state-opt.hidden{display:none}
+.state-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}.state-tag{display:flex;align-items:center;gap:3px;padding:2px 8px;background:var(--blue-50);border:1px solid var(--blue-100);border-radius:4px;font-size:10px;font-weight:600;color:var(--blue-500)}.state-tag button{border:none;background:none;color:var(--blue-500);cursor:pointer;font-size:9px;padding:0;line-height:1}
+.fp-footer{display:flex;gap:10px;justify-content:flex-end;padding:16px 24px;border-top:1px solid var(--border)}
+.filter-btn-toolbar{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid var(--border-input);background:var(--bg-input);font-size:12px;font-weight:500;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .15s;position:relative}.filter-btn-toolbar:hover{border-color:var(--blue-500);color:var(--blue-500)}.filter-btn-toolbar svg{width:14px;height:14px}.filter-btn-toolbar.has-filters{border-color:var(--blue-500);color:var(--blue-500);background:var(--blue-50)}.filter-badge{position:absolute;top:-6px;right:-6px;background:var(--blue-500);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center}.filter-btn-toolbar.has-filters .filter-badge{display:flex}
+@media(max-width:1200px){.payment-layout{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon">GL</div><span>Law</span></div>
+  <div class="sidebar-section">Menu</div>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Calendar</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Matters</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Billing</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Contacts</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8l-4 4-4-4"/></svg>Campaigns</a>
+  <a class="sidebar-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>Cashier</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Messages</a>
+  <div class="sidebar-section">Forms</div>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Form Builder</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Templates</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/></svg>Documents</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>RA Automator</a>
+  <div class="sidebar-section">Reports</div>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>Revenue</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6"/></svg>Call Log Flow</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aging</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
+  <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Bonuses</a>
+</nav>
+<div class="main">
+<div class="topbar">
+  <div class="topbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Search cases, documents, or tasks..."></div>
+  <div class="topbar-right"><button class="theme-toggle" onclick="toggleTheme()"><svg id="themeIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button><span style="font-size:12px;color:var(--text-secondary)" id="userEmail"></span><span style="font-size:12px;color:var(--text-secondary);cursor:pointer">Logout</span></div>
+</div>
+<div class="content">
+<div class="page-title">Cashier</div>
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('transactions',this)">Transactions</button>
+  <button class="tab-btn" onclick="switchTab('make-payment',this)">Make Payment</button>
+</div>
+
+<!-- TAB 1: TRANSACTIONS -->
+<div id="tab-transactions" class="tab-panel active">
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Total Collected</div><div class="stat-value">$48,720.00</div></div>
+    <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value">$3,150.00</div></div>
+    <div class="stat-card"><div class="stat-label">This Month</div><div class="stat-value">$12,480.00</div></div>
+    <div class="stat-card"><div class="stat-label">Failed</div><div class="stat-value">7</div></div>
+  </div>
+  <div class="pills-total-row">
+    <div class="filter-pills" id="txnFilters">
+      <button class="filter-pill active" onclick="filterTxn('all',this)">All</button>
+      <button class="filter-pill" onclick="filterTxn('Completed',this)" data-active-class="active-success">Successful</button>
+      <button class="filter-pill" onclick="filterTxn('Failed',this)" data-active-class="active-failed">Declined</button>
+      <button class="filter-pill" onclick="filterTxn('Refunded',this)" data-active-class="active-refunded">Refunded</button>
+      <button class="filter-pill" onclick="filterTxn('Pending',this)" data-active-class="active-pending">Pending</button>
+      <button class="filter-pill" onclick="filterTxn('Scheduled',this)" data-active-class="active-scheduled">Scheduled</button>
+      <button class="filter-pill" onclick="filterTxn('Cancelled',this)" data-active-class="active-cancelled">Cancelled</button>
+    </div>
+    <div class="txn-total-card" id="txnTotalCard">
+      <div class="ttc-left"><span class="ttc-label">Total</span><span class="ttc-sublabel" id="ftbSublabel" style="color:var(--text-primary)">All Transactions</span></div>
+      <div class="ttc-value" id="ftbValue" style="color:var(--text-primary)">$36,070.00</div>
+    </div>
+  </div>
+  <div class="filter-row-secondary">
+    <button class="filter-scope-btn" id="firmScopeBtn" onclick="toggleFirmScope()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>Law Firm Transactions</button>
+    <div class="filter-search-combo fsc-hidden" id="firmCombo">
+      <div class="fsc-selected-tag" id="firmTag"><span id="firmTagText">--</span><button class="fsc-tag-clear" onclick="clearFirmFilter()"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+      <div class="fsc-input" id="firmComboInput">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="firmFilterInput" placeholder="All law firms" oninput="filterFirmDropdown()" onfocus="openFirmFilterDD()">
+      </div>
+      <div class="fsc-dropdown" id="firmFilterDD">
+        <div class="fsc-item active-item" onclick="pickFirmFilter('all','All Law Firms')"><div class="fsc-icon">ALL</div><div><div class="fsc-name">All Law Firms</div><div class="fsc-detail">Show all transactions</div></div></div>
+        <div class="fsc-item" onclick="pickFirmFilter('ALG','Alexander Law Group')"><div class="fsc-icon">ALG</div><div><div class="fsc-name">Alexander Law Group, PLLC</div><div class="fsc-detail">TX · Foreclosure Defense, Estate Planning</div></div></div>
+        <div class="fsc-item" onclick="pickFirmFilter('MLA','Martinez Legal')"><div class="fsc-icon">MLA</div><div><div class="fsc-name">Martinez Legal Associates</div><div class="fsc-detail">MA · Foreclosure Defense</div></div></div>
+        <div class="fsc-item" onclick="pickFirmFilter('DLF','Davis Law Firm')"><div class="fsc-icon">DLF</div><div><div class="fsc-name">Davis Law Firm, PC</div><div class="fsc-detail">FL · Estate Planning</div></div></div>
+        <div class="fsc-item" onclick="pickFirmFilter('W&amp;A','Wilson &amp; Associates')"><div class="fsc-icon">W&amp;A</div><div><div class="fsc-name">Wilson &amp; Associates</div><div class="fsc-detail">NV · Foreclosure Defense</div></div></div>
+        <div class="fsc-item" onclick="pickFirmFilter('C&amp;P','Chen &amp; Partners')"><div class="fsc-icon">C&amp;P</div><div><div class="fsc-name">Chen &amp; Partners LLP</div><div class="fsc-detail">CA · Foreclosure Defense, SSDI</div></div></div>
+      </div>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <button class="filter-scope-btn" id="entityScopeBtn" onclick="toggleEntityScope()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Entity Transactions</button>
+    <div class="filter-search-combo fsc-hidden" id="entityCombo">
+      <div class="fsc-selected-tag" id="entityTag"><span id="entityTagText">--</span><button class="fsc-tag-clear" onclick="clearEntityFilter()"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+      <div class="fsc-input" id="entityComboInput">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="entityFilterInput" placeholder="All entities" oninput="filterEntityDropdown()" onfocus="openEntityFilterDD()">
+      </div>
+      <div class="fsc-dropdown" id="entityFilterDD">
+        <div class="fsc-item active-item" onclick="pickEntityFilter('all','All Entities')"><div class="fsc-icon">ALL</div><div><div class="fsc-name">All Entities</div><div class="fsc-detail">Show all transactions</div></div></div>
+        <div class="fsc-item" onclick="pickEntityFilter('GeniusLaw Holdings','GeniusLaw Holdings')"><div class="fsc-icon">GLH</div><div><div class="fsc-name">GeniusLaw Holdings, Inc.</div><div class="fsc-detail">Parent entity · Managed services</div></div></div>
+        <div class="fsc-item" onclick="pickEntityFilter('Alexander Law Group','Alexander Law Group')"><div class="fsc-icon">ALG</div><div><div class="fsc-name">Alexander Law Group, PLLC</div><div class="fsc-detail">Partner firm · TX</div></div></div>
+        <div class="fsc-item" onclick="pickEntityFilter('Martinez Legal','Martinez Legal')"><div class="fsc-icon">MLA</div><div><div class="fsc-name">Martinez Legal Associates</div><div class="fsc-detail">Partner firm · MA</div></div></div>
+        <div class="fsc-item" onclick="pickEntityFilter('Chen Partners','Chen &amp; Partners')"><div class="fsc-icon">C&amp;P</div><div><div class="fsc-name">Chen &amp; Partners LLP</div><div class="fsc-detail">Partner firm · CA</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-toolbar"><div class="toolbar-left"><div class="toolbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Search transactions..."></div></div><div style="display:flex;gap:8px"><button class="filter-btn-toolbar" id="filterToggleBtn" onclick="openFilterPanel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filters<span class="filter-badge" id="filterBadge">0</span></button><button class="btn btn-primary" style="padding:6px 14px;font-size:11px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button></div></div>
+    <table class="compact-table">
+      <thead><tr><th>Date</th><th>Client</th><th>State</th><th>Processor</th><th>Status</th><th>Amount</th><th>Description</th><th>Last 4</th><th>LF</th></tr></thead>
+      <tbody id="txnTableBody">
+        <tr data-status="Completed" data-amount="2500" data-firm="ALG" data-entity="Alexander Law Group" data-state="TX" onclick="openTxnModal('TXN-001','James Henderson','JH','','FD-TX-00421','$2,500.00','Visa ···4821','Completed','03.18.2026','Alexander Law Group','IOLTA Trust')"><td>03.18.2026 09:00</td><td><span class="client-link">James Henderson</span></td><td>TX</td><td>ECSuite</td><td><span class="badge badge-success">Successful</span></td><td class="amount">$2,500.00</td><td>James Henderson - Foreclosure Defense</td><td>4821</td><td class="client-link">ALG</td></tr>
+        <tr data-status="Failed" data-amount="1200" data-firm="ALG" data-entity="Alexander Law Group" data-decline="Card expired" data-state="TX" onclick="openTxnModal('TXN-015','Derek Lane','DL','','FD-TX-00502','$1,200.00','Visa ···8811','Failed','03.18.2026','Alexander Law Group','IOLTA Trust')"><td>03.18.2026 09:00</td><td><span class="client-link">Derek Lane</span></td><td>TX</td><td>ECSuite</td><td><div class="decline-reason"><span class="badge badge-failed">Declined</span><div class="dr-tooltip">Card expired</div></div></td><td class="amount">$1,200.00</td><td>Derek Lane - Foreclosure Defense</td><td>8811</td><td class="client-link">ALG</td></tr>
+        <tr data-status="Refunded" data-amount="750" data-firm="ALG" data-entity="Alexander Law Group" data-state="TX" onclick="openTxnModal('TXN-016','Tanya Brooks','TB','','EP-TX-00130','$750.00','ECS','Refunded','03.17.2026','Alexander Law Group','Operating')"><td>03.17.2026 09:00</td><td><span class="client-link">Tanya Brooks</span></td><td>TX</td><td>ECSuite</td><td><span class="badge badge-refunded">Refunded</span></td><td class="amount">$750.00</td><td>Tanya Brooks - Estate Planning</td><td>6201</td><td class="client-link">ALG</td></tr>
+        <tr data-status="Pending" data-amount="900" data-firm="ALG" data-entity="Alexander Law Group" data-state="TX" onclick="openTxnModal('TXN-017','Kevin Park','KP','','SSDI-TX-00061','$900.00','Visa ···3390','Pending','03.19.2026','Alexander Law Group','IOLTA Trust')"><td>03.19.2026 09:00</td><td><span class="client-link">Kevin Park</span></td><td>TX</td><td>ECSuite</td><td><span class="badge badge-pending">Pending</span></td><td class="amount">$900.00</td><td>Kevin Park - SSDI Claim</td><td>3390</td><td class="client-link">ALG</td></tr>
+        <tr data-status="Scheduled" data-amount="500" data-firm="ALG" data-entity="Alexander Law Group" data-state="GA" onclick="openTxnModal('TXN-009','Tiara Heard','TH','','FD-GA-00198','$500.00','ECS','Scheduled','03.20.2026','Alexander Law Group','IOLTA Trust')"><td>03.20.2026 09:00</td><td><span class="client-link">Tiara Heard</span></td><td>GA</td><td>ECSuite</td><td><span class="badge badge-scheduled">Scheduled</span></td><td class="amount">$500.00</td><td>Tiara Heard - Loan Modification</td><td>2166</td><td class="client-link">ALG</td></tr>
+        <tr data-status="Cancelled" data-amount="650" data-firm="ALG" data-entity="Alexander Law Group" data-state="SC" onclick="openTxnModal('TXN-018','Brenda Fox','BF','','FD-SC-00244','$650.00','ECS','Cancelled','03.11.2026','Alexander Law Group','IOLTA Trust')"><td>03.11.2026 09:00</td><td><span class="client-link">Brenda Fox</span></td><td>SC</td><td>ECSuite</td><td><span class="badge badge-cancelled">Cancelled</span></td><td class="amount">$650.00</td><td>Brenda Fox - Foreclosure Defense</td><td>7012</td><td class="client-link">ALG</td></tr>
+        <tr data-status="Completed" data-amount="1800" data-firm="MLA" data-entity="Martinez Legal" data-state="MA" onclick="openTxnModal('TXN-002','Claudia Muller','CM','','FD-MA-00318','$1,800.00','Stripe','Completed','03.17.2026','Martinez Legal','Operating')"><td>03.17.2026 09:00</td><td><span class="client-link">Claudia Muller</span></td><td>MA</td><td>Stripe</td><td><span class="badge badge-success">Successful</span></td><td class="amount">$1,800.00</td><td>Claudia Muller - Foreclosure Defense</td><td>3344</td><td class="client-link">MLA</td></tr>
+        <tr data-status="Failed" data-amount="2200" data-firm="MLA" data-entity="Martinez Legal" data-decline="Fraud alert - unusual activity detected" data-state="MA" onclick="openTxnModal('TXN-019','Amy Tran','AT','','FD-MA-00340','$2,200.00','Stripe','Failed','03.16.2026','Martinez Legal','IOLTA Trust')"><td>03.16.2026 09:00</td><td><span class="client-link">Amy Tran</span></td><td>MA</td><td>Stripe</td><td><div class="decline-reason"><span class="badge badge-failed">Declined</span><div class="dr-tooltip">Fraud alert - unusual activity detected</div></div></td><td class="amount">$2,200.00</td><td>Amy Tran - Foreclosure Defense</td><td>5501</td><td class="client-link">MLA</td></tr>
+        <tr data-status="Refunded" data-amount="1100" data-firm="MLA" data-entity="Martinez Legal" data-state="MA" onclick="openTxnModal('TXN-020','Luis Ortega','LO','','FD-MA-00355','$1,100.00','Stripe','Refunded','03.15.2026','Martinez Legal','Operating')"><td>03.15.2026 09:00</td><td><span class="client-link">Luis Ortega</span></td><td>MA</td><td>Stripe</td><td><span class="badge badge-refunded">Refunded</span></td><td class="amount">$1,100.00</td><td>Luis Ortega - Foreclosure Defense</td><td>2289</td><td class="client-link">MLA</td></tr>
+        <tr data-status="Pending" data-amount="950" data-firm="MLA" data-entity="Martinez Legal" data-state="MA" onclick="openTxnModal('TXN-021','Sarah Kim','SK','','FD-MA-00361','$950.00','Stripe','Pending','03.18.2026','Martinez Legal','IOLTA Trust')"><td>03.18.2026 09:00</td><td><span class="client-link">Sarah Kim</span></td><td>MA</td><td>Stripe</td><td><span class="badge badge-pending">Pending</span></td><td class="amount">$950.00</td><td>Sarah Kim - Foreclosure Defense</td><td>6678</td><td class="client-link">MLA</td></tr>
+        <tr data-status="Scheduled" data-amount="800" data-firm="MLA" data-entity="Martinez Legal" data-state="MA" onclick="openTxnModal('TXN-022','Dan Rivera','DR','','FD-MA-00370','$800.00','Stripe','Scheduled','03.25.2026','Martinez Legal','Operating')"><td>03.25.2026 09:00</td><td><span class="client-link">Dan Rivera</span></td><td>MA</td><td>Stripe</td><td><span class="badge badge-scheduled">Scheduled</span></td><td class="amount">$800.00</td><td>Dan Rivera - Foreclosure Defense</td><td>4412</td><td class="client-link">MLA</td></tr>
+        <tr data-status="Cancelled" data-amount="600" data-firm="MLA" data-entity="Martinez Legal" data-state="MA" onclick="openTxnModal('TXN-023','Nina Patel','NP','','FD-MA-00382','$600.00','Stripe','Cancelled','03.09.2026','Martinez Legal','IOLTA Trust')"><td>03.09.2026 09:00</td><td><span class="client-link">Nina Patel</span></td><td>MA</td><td>Stripe</td><td><span class="badge badge-cancelled">Cancelled</span></td><td class="amount">$600.00</td><td>Nina Patel - Foreclosure Defense</td><td>9903</td><td class="client-link">MLA</td></tr>
+        <tr data-status="Completed" data-amount="475" data-firm="DLF" data-entity="GeniusLaw Holdings" data-state="FL" onclick="openTxnModal('TXN-024','Mark Diaz','MD','','EP-FL-00115','$475.00','ECS','Completed','03.16.2026','Davis Law Firm','IOLTA Trust')"><td>03.16.2026 09:00</td><td><span class="client-link">Mark Diaz</span></td><td>FL</td><td>ECSuite</td><td><span class="badge badge-success">Successful</span></td><td class="amount">$475.00</td><td>Mark Diaz - Estate Planning</td><td>1120</td><td class="client-link">DLF</td></tr>
+        <tr data-status="Pending" data-amount="950" data-firm="DLF" data-entity="GeniusLaw Holdings" data-state="FL" onclick="openTxnModal('TXN-003','Ofelia Bukantz','OB','','EP-FL-00105','$950.00','Visa ···7742','Pending','03.17.2026','Davis Law Firm','IOLTA Trust')"><td>03.17.2026 09:00</td><td><span class="client-link">Ofelia Bukantz</span></td><td>FL</td><td>ECSuite</td><td><span class="badge badge-pending">Pending</span></td><td class="amount">$950.00</td><td>Ofelia Bukantz - Estate Planning</td><td>7742</td><td class="client-link">DLF</td></tr>
+        <tr data-status="Failed" data-amount="850" data-firm="DLF" data-entity="GeniusLaw Holdings" data-decline="Do not honor - bank rejected" data-state="FL" onclick="openTxnModal('TXN-025','Helen Grant','HG','','EP-FL-00122','$850.00','Visa ···4490','Failed','03.14.2026','Davis Law Firm','IOLTA Trust')"><td>03.14.2026 09:00</td><td><span class="client-link">Helen Grant</span></td><td>FL</td><td>ECSuite</td><td><div class="decline-reason"><span class="badge badge-failed">Declined</span><div class="dr-tooltip">Do not honor - bank rejected</div></div></td><td class="amount">$850.00</td><td>Helen Grant - Estate Planning</td><td>4490</td><td class="client-link">DLF</td></tr>
+        <tr data-status="Refunded" data-amount="500" data-firm="DLF" data-entity="GeniusLaw Holdings" data-state="FL" onclick="openTxnModal('TXN-026','Tony Vega','TV','','EP-FL-00128','$500.00','ECS','Refunded','03.12.2026','Davis Law Firm','Operating')"><td>03.12.2026 09:00</td><td><span class="client-link">Tony Vega</span></td><td>FL</td><td>ECSuite</td><td><span class="badge badge-refunded">Refunded</span></td><td class="amount">$500.00</td><td>Tony Vega - Estate Planning</td><td>3301</td><td class="client-link">DLF</td></tr>
+        <tr data-status="Scheduled" data-amount="700" data-firm="DLF" data-entity="GeniusLaw Holdings" data-state="FL" onclick="openTxnModal('TXN-027','Lisa Moon','LM','','EP-FL-00135','$700.00','ECS','Scheduled','03.22.2026','Davis Law Firm','IOLTA Trust')"><td>03.22.2026 09:00</td><td><span class="client-link">Lisa Moon</span></td><td>FL</td><td>ECSuite</td><td><span class="badge badge-scheduled">Scheduled</span></td><td class="amount">$700.00</td><td>Lisa Moon - Estate Planning</td><td>8834</td><td class="client-link">DLF</td></tr>
+        <tr data-status="Cancelled" data-amount="750" data-firm="DLF" data-entity="GeniusLaw Holdings" data-state="NV" onclick="openTxnModal('TXN-013','Maria Santos','MS','','FD-NV-00145','$750.00','ECS','Cancelled','03.12.2026','Davis Law Firm','IOLTA Trust')"><td>03.12.2026 09:00</td><td><span class="client-link">Maria Santos</span></td><td>NV</td><td>ECSuite</td><td><span class="badge badge-cancelled">Cancelled</span></td><td class="amount">$750.00</td><td>Maria Santos - Foreclosure Defense</td><td>4410</td><td class="client-link">DLF</td></tr>
+        <tr data-status="Failed" data-amount="3200" data-firm="W&amp;A" data-entity="GeniusLaw Holdings" data-decline="Insufficient funds - checking account balance too low" data-state="FL" onclick="openTxnModal('TXN-004','Gregory Mackey','GM','','FD-FL-00287','$3,200.00','ECS','Failed','03.16.2026','Wilson &amp; Associates','IOLTA Trust')"><td>03.16.2026 09:00</td><td><span class="client-link">Gregory Mackey</span></td><td>FL</td><td>ECSuite</td><td><div class="decline-reason"><span class="badge badge-failed">Declined</span><div class="dr-tooltip">Insufficient funds - checking account balance too low</div></div></td><td class="amount">$3,200.00</td><td>Gregory Mackey - Foreclosure Defense</td><td>0091</td><td class="client-link">W&amp;A</td></tr>
+        <tr data-status="Completed" data-amount="1400" data-firm="W&amp;A" data-entity="GeniusLaw Holdings" data-state="NV" onclick="openTxnModal('TXN-028','Sam Burke','SB','','FD-NV-00160','$1,400.00','ECS','Completed','03.15.2026','Wilson &amp; Associates','IOLTA Trust')"><td>03.15.2026 09:00</td><td><span class="client-link">Sam Burke</span></td><td>NV</td><td>ECSuite</td><td><span class="badge badge-success">Successful</span></td><td class="amount">$1,400.00</td><td>Sam Burke - Foreclosure Defense</td><td>5567</td><td class="client-link">W&amp;A</td></tr>
+        <tr data-status="Pending" data-amount="1050" data-firm="W&amp;A" data-entity="GeniusLaw Holdings" data-state="NV" onclick="openTxnModal('TXN-029','Joan Walsh','JW','','FD-NV-00172','$1,050.00','ECS','Pending','03.18.2026','Wilson &amp; Associates','IOLTA Trust')"><td>03.18.2026 09:00</td><td><span class="client-link">Joan Walsh</span></td><td>NV</td><td>ECSuite</td><td><span class="badge badge-pending">Pending</span></td><td class="amount">$1,050.00</td><td>Joan Walsh - Foreclosure Defense</td><td>2290</td><td class="client-link">W&amp;A</td></tr>
+        <tr data-status="Refunded" data-amount="900" data-firm="W&amp;A" data-entity="GeniusLaw Holdings" data-state="NV" onclick="openTxnModal('TXN-030','Ray Cooper','RC','','FD-NV-00180','$900.00','ECS','Refunded','03.13.2026','Wilson &amp; Associates','Operating')"><td>03.13.2026 09:00</td><td><span class="client-link">Ray Cooper</span></td><td>NV</td><td>ECSuite</td><td><span class="badge badge-refunded">Refunded</span></td><td class="amount">$900.00</td><td>Ray Cooper - Foreclosure Defense</td><td>7745</td><td class="client-link">W&amp;A</td></tr>
+        <tr data-status="Scheduled" data-amount="1100" data-firm="W&amp;A" data-entity="GeniusLaw Holdings" data-state="NV" onclick="openTxnModal('TXN-031','Eve Nash','EN','','FD-NV-00188','$1,100.00','ECS','Scheduled','03.26.2026','Wilson &amp; Associates','IOLTA Trust')"><td>03.26.2026 09:00</td><td><span class="client-link">Eve Nash</span></td><td>NV</td><td>ECSuite</td><td><span class="badge badge-scheduled">Scheduled</span></td><td class="amount">$1,100.00</td><td>Eve Nash - Foreclosure Defense</td><td>3318</td><td class="client-link">W&amp;A</td></tr>
+        <tr data-status="Cancelled" data-amount="800" data-firm="W&amp;A" data-entity="GeniusLaw Holdings" data-state="NV" onclick="openTxnModal('TXN-032','Phil Stone','PS','','FD-NV-00195','$800.00','ECS','Cancelled','03.08.2026','Wilson &amp; Associates','IOLTA Trust')"><td>03.08.2026 09:00</td><td><span class="client-link">Phil Stone</span></td><td>NV</td><td>ECSuite</td><td><span class="badge badge-cancelled">Cancelled</span></td><td class="amount">$800.00</td><td>Phil Stone - Foreclosure Defense</td><td>1156</td><td class="client-link">W&amp;A</td></tr>
+        <tr data-status="Completed" data-amount="2000" data-firm="C&amp;P" data-entity="Chen Partners" data-state="CA" onclick="openTxnModal('TXN-033','Anna Lim','AL','','FD-CA-00540','$2,000.00','Stripe','Completed','03.17.2026','Chen &amp; Partners','IOLTA Trust')"><td>03.17.2026 09:00</td><td><span class="client-link">Anna Lim</span></td><td>CA</td><td>Stripe</td><td><span class="badge badge-success">Successful</span></td><td class="amount">$2,000.00</td><td>Anna Lim - Foreclosure Defense</td><td>7780</td><td class="client-link">C&amp;P</td></tr>
+        <tr data-status="Refunded" data-amount="2000" data-firm="C&amp;P" data-entity="Chen Partners" data-state="CA" onclick="openTxnModal('TXN-006','Rosa Williams','RW','','FD-CA-00519','$2,000.00','Stripe','Refunded','03.14.2026','Chen &amp; Partners','IOLTA Trust')"><td>03.14.2026 09:00</td><td><span class="client-link">Rosa Williams</span></td><td>CA</td><td>Stripe</td><td><span class="badge badge-refunded">Refunded</span></td><td class="amount">$2,000.00</td><td>Rosa Williams - Foreclosure Defense</td><td>3356</td><td class="client-link">C&amp;P</td></tr>
+        <tr data-status="Cancelled" data-amount="1200" data-firm="C&amp;P" data-entity="Chen Partners" data-state="CA" onclick="openTxnModal('TXN-014','Robert Chen','RC','','EP-CA-00088','$1,200.00','Stripe','Cancelled','03.10.2026','Chen &amp; Partners','Operating')"><td>03.10.2026 09:00</td><td><span class="client-link">Robert Chen</span></td><td>CA</td><td>Stripe</td><td><span class="badge badge-cancelled">Cancelled</span></td><td class="amount">$1,200.00</td><td>Robert Chen - Estate Planning</td><td>8891</td><td class="client-link">C&amp;P</td></tr>
+        <tr data-status="Failed" data-amount="1750" data-firm="C&amp;P" data-entity="Chen Partners" data-decline="Card number invalid" data-state="CA" onclick="openTxnModal('TXN-034','Mike Chow','MC','','SSDI-CA-00045','$1,750.00','Stripe','Failed','03.15.2026','Chen &amp; Partners','IOLTA Trust')"><td>03.15.2026 09:00</td><td><span class="client-link">Mike Chow</span></td><td>CA</td><td>Stripe</td><td><div class="decline-reason"><span class="badge badge-failed">Declined</span><div class="dr-tooltip">Card number invalid</div></div></td><td class="amount">$1,750.00</td><td>Mike Chow - SSDI Claim</td><td>0022</td><td class="client-link">C&amp;P</td></tr>
+        <tr data-status="Pending" data-amount="1500" data-firm="C&amp;P" data-entity="Chen Partners" data-state="CA" onclick="openTxnModal('TXN-035','Grace Yuen','GY','','FD-CA-00555','$1,500.00','Stripe','Pending','03.19.2026','Chen &amp; Partners','IOLTA Trust')"><td>03.19.2026 09:00</td><td><span class="client-link">Grace Yuen</span></td><td>CA</td><td>Stripe</td><td><span class="badge badge-pending">Pending</span></td><td class="amount">$1,500.00</td><td>Grace Yuen - Foreclosure Defense</td><td>6640</td><td class="client-link">C&amp;P</td></tr>
+        <tr data-status="Scheduled" data-amount="995" data-firm="C&amp;P" data-entity="Chen Partners" data-state="CA" onclick="openTxnModal('TXN-036','Wendy Hu','WH','','FD-CA-00568','$995.00','Stripe','Scheduled','03.28.2026','Chen &amp; Partners','IOLTA Trust')"><td>03.28.2026 09:00</td><td><span class="client-link">Wendy Hu</span></td><td>CA</td><td>Stripe</td><td><span class="badge badge-scheduled">Scheduled</span></td><td class="amount">$995.00</td><td>Wendy Hu - Foreclosure Defense</td><td>4455</td><td class="client-link">C&amp;P</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="5" style="text-align:right">Total:</td><td class="amount" id="tfootTotal">$36,070.00</td><td colspan="3"></td></tr></tfoot>
+    </table>
+    <div class="table-footer"><span>Showing 1-30 of 142 transactions</span><div class="pagination"><button>&lt;</button><button class="active">1</button><button>2</button><button>3</button><button>...</button><button>12</button><button>&gt;</button></div></div>
+  </div>
+</div>
+
+<!-- TAB 3: MAKE PAYMENT -->
+<div id="tab-make-payment" class="tab-panel">
+<div class="payment-layout">
+<div>
+  <div class="payment-form-card" style="margin-bottom:24px">
+    <div class="form-section-title"><div class="step-num">1</div>Select Client</div>
+    <div class="search-wrapper" id="clientSearch">
+      <div class="search-input-group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="clientSearchInput" placeholder="Search clients by name or email..." oninput="filterClients()" onfocus="openClientDropdown()"></div>
+      <div class="search-dropdown" id="clientDropdown">
+        <div class="dropdown-item" onclick="selectClient('JH','James Henderson','thejokerman1974','TX')"><div class="avatar">JH</div><div class="item-info"><div class="item-name">James Henderson</div><div class="item-detail">817-769-0472</div></div><div class="item-state">TX</div></div>
+        <div class="dropdown-item" onclick="selectClient('GM','Gregory Mackey','gmackey.gsu','FL')"><div class="avatar">GM</div><div class="item-info"><div class="item-name">Gregory Mackey</div><div class="item-detail">407-779-5273</div></div><div class="item-state">FL</div></div>
+        <div class="dropdown-item" onclick="selectClient('CM','Claudia Muller','Piemclat99','MA')"><div class="avatar">CM</div><div class="item-info"><div class="item-name">Claudia Muller</div><div class="item-detail">(978) 327-9815</div></div><div class="item-state">MA</div></div>
+        <div class="dropdown-item" onclick="selectClient('OB','Ofelia Bukantz','obukantz','FL')"><div class="avatar">OB</div><div class="item-info"><div class="item-name">Ofelia Bukantz</div><div class="item-detail">(561) 699-2215</div></div><div class="item-state">FL</div></div>
+        <div class="dropdown-item" onclick="selectClient('CD','Clint Douglas','c.douglas','TX')"><div class="avatar">CD</div><div class="item-info"><div class="item-name">Clint Douglas</div><div class="item-detail">(214) 555-0188</div></div><div class="item-state">TX</div></div>
+        <div class="dropdown-item" onclick="selectClient('RW','Rosa Williams','rosa.w','CA')"><div class="avatar">RW</div><div class="item-info"><div class="item-name">Rosa Williams</div><div class="item-detail">(916) 555-0234</div></div><div class="item-state">CA</div></div>
+      </div>
+    </div>
+    <div class="selected-client" id="selectedClientCard"><div class="avatar" id="selectedAvatar">JH</div><div class="client-info"><div class="client-name" id="selectedName">James Henderson</div><div class="client-email" id="selectedEmail"></div></div><button class="btn-clear" onclick="clearClient()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  </div>
+  <!-- Step 2: Law Firm & Account (rich dropdown) -->
+  <div class="payment-form-card" style="margin-bottom:24px">
+    <div class="form-section-title"><div class="step-num">2</div>Law Firm &amp; Account</div>
+    <label style="display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px">Select Law Firm</label>
+    <div class="search-wrapper" id="firmSearch" style="margin-bottom:12px">
+      <div class="search-input-group">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
+        <input type="text" id="firmSearchInput" placeholder="Search law firms..." oninput="filterFirms()" onfocus="openFirmDropdown()" readonly>
+      </div>
+      <div class="search-dropdown" id="firmDropdown">
+        <div class="dropdown-item" onclick="selectFirm('alexander-law','Alexander Law Group, PLLC','TX · Foreclosure Defense, Estate Planning')"><div class="avatar" style="border-radius:8px;font-size:10px">ALG</div><div class="item-info"><div class="item-name">Alexander Law Group, PLLC</div><div class="item-detail">TX · Foreclosure Defense, Estate Planning</div></div><div class="item-state">TX</div></div>
+        <div class="dropdown-item" onclick="selectFirm('martinez-legal','Martinez Legal Associates','MA · Foreclosure Defense')"><div class="avatar" style="border-radius:8px;font-size:10px">MLA</div><div class="item-info"><div class="item-name">Martinez Legal Associates</div><div class="item-detail">MA · Foreclosure Defense</div></div><div class="item-state">MA</div></div>
+        <div class="dropdown-item" onclick="selectFirm('chen-partners','Chen &amp; Partners LLP','CA · Foreclosure Defense, SSDI')"><div class="avatar" style="border-radius:8px;font-size:10px">C&amp;P</div><div class="item-info"><div class="item-name">Chen &amp; Partners LLP</div><div class="item-detail">CA · Foreclosure Defense, SSDI</div></div><div class="item-state">CA</div></div>
+        <div class="dropdown-item" onclick="selectFirm('davis-firm','Davis Law Firm, PC','FL · Estate Planning')"><div class="avatar" style="border-radius:8px;font-size:10px">DLF</div><div class="item-info"><div class="item-name">Davis Law Firm, PC</div><div class="item-detail">FL · Estate Planning</div></div><div class="item-state">FL</div></div>
+        <div class="dropdown-item" onclick="selectFirm('wilson-assoc','Wilson &amp; Associates','NV · Foreclosure Defense')"><div class="avatar" style="border-radius:8px;font-size:10px">W&amp;A</div><div class="item-info"><div class="item-name">Wilson &amp; Associates</div><div class="item-detail">NV · Foreclosure Defense</div></div><div class="item-state">NV</div></div>
+      </div>
+    </div>
+    <div class="selected-client" id="selectedFirmCard" style="margin-bottom:12px">
+      <div class="avatar" id="selectedFirmAvatar" style="border-radius:8px;font-size:10px">ALG</div>
+      <div class="client-info"><div class="client-name" id="selectedFirmName">--</div><div class="client-email" id="selectedFirmDetail">--</div></div>
+      <button class="btn-clear" onclick="clearFirm()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div id="firmAccountSection" style="display:none"><label style="display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:8px">Select Account</label>
+      <div class="firm-account-cards">
+        <div class="firm-account-card active" onclick="selectFirmAccount(this)"><div class="fa-icon trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div class="fa-info"><div class="fa-name">IOLTA Trust Account</div><div class="fa-detail">Chase ···8824 · Client retainer funds</div></div><div class="fa-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+        <div class="firm-account-card" onclick="selectFirmAccount(this)"><div class="fa-icon operating"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg></div><div class="fa-info"><div class="fa-name">Operating Account</div><div class="fa-detail">Chase ···4401 · Earned fees &amp; expenses</div></div><div class="fa-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Attach to Order -->
+  <div class="payment-form-card" style="margin-bottom:24px">
+    <div class="form-section-title"><div class="step-num">3</div>Attach to Order</div>
+    <p style="font-size:13px;color:var(--text-tertiary)" id="orderPlaceholder">Select a client first to see their orders</p>
+    <div class="order-section" id="orderSection">
+      <div class="order-search-wrapper" id="orderSearchWrapper">
+        <div class="order-search-input" onclick="toggleOrderDropdown()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+          <input type="text" id="orderSearchInput" placeholder="Search orders..." onfocus="openOrderDropdown()" readonly>
+        </div>
+        <div class="order-dropdown-list" id="orderDropdownList"></div>
+      </div>
+      <div class="selected-order" id="selectedOrderCard">
+        <div class="so-icon" id="soIcon" style="background:var(--blue-50);color:var(--blue-500)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div>
+        <div class="so-info"><div class="so-id" id="soId">--</div><div class="so-type" id="soType">--</div><div class="so-balance" id="soBalance">--</div></div>
+        <button class="btn-clear" onclick="clearOrder()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Scheduled? -->
+  <div class="payment-form-card" style="margin-bottom:24px">
+    <div class="form-section-title"><div class="step-num">4</div>Is this a scheduled payment?</div>
+    <div class="yn-toggle"><button class="yn-btn" onclick="toggleScheduled(true,this)">Yes</button><button class="yn-btn active-no" onclick="toggleScheduled(false,this)">No</button></div>
+    <div class="schedule-date-section" id="scheduleDateSection"><div style="margin-top:4px"><label style="display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px">Scheduled Payment Date</label><input type="date" id="scheduledDate" onchange="updateSummary()"></div>
+      <div class="form-row" style="margin-top:16px;margin-bottom:0"><div class="form-group" style="margin-bottom:0"><label>Frequency</label><select class="styled-select" id="scheduleFrequency" onchange="updateSummary()"><option value="one-time">One-time</option><option value="weekly">Weekly</option><option value="bi-weekly">Bi-weekly</option><option value="monthly" selected>Monthly</option></select></div><div class="form-group" style="margin-bottom:0"><label>Number of Payments</label><input type="number" class="styled-number" id="scheduleCount" value="1" min="1" max="48" onchange="updateSummary()"></div></div>
+    </div>
+  </div>
+
+  <!-- Step 5: Payment Method (3 buttons + cards on file per type) -->
+  <div class="payment-form-card" style="margin-bottom:24px">
+    <div class="form-section-title"><div class="step-num">5</div>Payment Method</div>
+    <div class="payment-methods">
+      <div class="pm-card active" onclick="selectPmType('card',this)"><div class="pm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/><path d="M6 16h4"/></svg></div><div class="pm-label">Credit Card</div></div>
+      <div class="pm-card" onclick="selectPmType('stripe',this)"><div class="pm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7a2 2 0 012-2h16a2 2 0 012 2v2H2V7z"/><rect x="2" y="9" width="20" height="10" rx="1"/><path d="M6 15h4M14 15h4"/></svg></div><div class="pm-label">Stripe</div></div>
+      <div class="pm-card" onclick="selectPmType('ecs',this)"><div class="pm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg></div><div class="pm-label">ECS</div></div>
+    </div>
+    <div id="pmCardsArea" style="display:none">
+      <label style="display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:8px" id="pmCardsLabel">Cards on file</label>
+      <div class="saved-method-cards" id="savedMethodCards"></div>
+    </div>
+    <p style="font-size:13px;color:var(--text-tertiary);margin-top:8px" id="pmSelectClientHint">Select a client to see saved methods</p>
+  </div>
+
+  <!-- Step 6: Amount & Details -->
+  <div class="payment-form-card">
+    <div class="form-section-title"><div class="step-num">6</div>Amount &amp; Details</div>
+    <div class="form-row"><div class="form-group" style="margin-bottom:0"><label>Amount ($)</label><input type="text" id="paymentAmount" placeholder="0.00" oninput="updateSummary()"></div><div class="form-group" style="margin-bottom:0"><label>Reference / Invoice #</label><input type="text" placeholder="Auto-generated"></div></div>
+    <div class="form-group"><label>Notes (optional)</label><textarea placeholder="Add a note for this payment..."></textarea></div>
+    <div class="form-actions"><button class="btn btn-outline">Cancel</button><button class="btn btn-primary" id="processBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>Process Payment</button></div>
+  </div>
+</div>
+<div class="payment-summary"><div class="summary-title">Payment Summary</div><div id="summaryContent"><div class="summary-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-tertiary);margin-bottom:8px"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg><br>Select a client and order<br>to see payment details</div></div></div>
+</div></div>
+</div></div>
+<!-- TRANSACTION DETAIL MODAL -->
+<div class="modal-overlay" id="txnModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header"><button class="modal-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="detail-fieldset" style="margin-top:4px">
+        <div class="detail-fieldset-title">DETAILS</div>
+        <table class="detail-table">
+          <tr><td>Transaction ID</td><td id="mdTxnId" style="font-family:monospace;font-size:12px">--</td></tr>
+          <tr><td>Client</td><td id="mdClient">--</td></tr>
+          <tr><td>Email</td><td id="mdEmail">--</td></tr>
+          <tr><td>Order</td><td id="mdOrder">--</td></tr>
+          <tr><td>Amount</td><td id="mdAmount" style="font-weight:600">--</td></tr>
+          <tr><td>Payment Method</td><td id="mdMethod">--</td></tr>
+          <tr><td>Law Firm</td><td id="mdFirm">--</td></tr>
+          <tr><td>Account</td><td id="mdAccount">--</td></tr>
+          <tr><td>Date</td><td id="mdDate">--</td></tr>
+          <tr><td>Status</td><td id="mdStatus">--</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn-outline-danger" id="btnVoid" onclick="doVoid()">Void Transaction</button>
+      <button class="btn-outline-blue" id="btnRefund" onclick="doRefund()">Refund</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PAYMENT METHOD MODAL -->
+<div class="modal-overlay add-card-modal" id="addCardModal" onclick="if(event.target===this)closeAddCard()">
+  <div class="modal">
+    <div class="modal-header"><button class="modal-close" onclick="closeAddCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-section-icon" id="addCardIcon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/><path d="M6 16h4"/></svg></div>
+      <h3 id="addCardTitle">Add Credit Card</h3>
+      <div class="modal-subtitle" id="addCardSubtitle">Enter card details for this client</div>
+
+      <div class="card-visual" id="cardVisual">
+        <div class="cv-number" id="cvNumber">···· ···· ···· ····</div>
+        <div class="cv-bottom">
+          <div><div class="cv-label">CARDHOLDER</div><div id="cvName">CLIENT NAME</div></div>
+          <div><div class="cv-label">EXPIRES</div><div id="cvExpiry">MM/YY</div></div>
+        </div>
+      </div>
+
+      <!-- Credit Card Fields -->
+      <div id="cardFields">
+        <div class="card-form-group">
+          <label>Card Number</label>
+          <input type="text" id="newCardNumber" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+        </div>
+        <div class="card-form-group">
+          <label>Cardholder Name</label>
+          <input type="text" id="newCardName" placeholder="Name on card" oninput="updateCardVisual()">
+        </div>
+        <div class="card-form-row-3">
+          <div class="card-form-group">
+            <label>Expiry</label>
+            <input type="text" id="newCardExpiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
+          </div>
+          <div class="card-form-group">
+            <label>CVV</label>
+            <input type="text" id="newCardCvv" placeholder="···" maxlength="4">
+          </div>
+          <div class="card-form-group">
+            <label>ZIP Code</label>
+            <input type="text" id="newCardZip" placeholder="12345" maxlength="5">
+          </div>
+        </div>
+      </div>
+
+      <!-- ECS / Bank Fields -->
+      <div id="bankFields" style="display:none">
+        <div class="card-form-group">
+          <label>Account Holder Name</label>
+          <input type="text" placeholder="Full name on account">
+        </div>
+        <div class="card-form-group">
+          <label>Routing Number</label>
+          <input type="text" placeholder="9 digits" maxlength="9">
+        </div>
+        <div class="card-form-group">
+          <label>Account Number</label>
+          <input type="text" placeholder="Account number">
+        </div>
+        <div class="card-form-row">
+          <div class="card-form-group">
+            <label>Account Type</label>
+            <select class="styled-select"><option>Checking</option><option>Savings</option></select>
+          </div>
+          <div class="card-form-group">
+            <label>Bank Name</label>
+            <input type="text" placeholder="e.g. Chase, Wells Fargo">
+          </div>
+        </div>
+      </div>
+
+      <div class="save-card-check">
+        <input type="checkbox" id="saveCardCheck" checked>
+        <label for="saveCardCheck">Save this payment method for future use</label>
+      </div>
+    </div>
+    <div class="add-card-footer">
+      <button class="btn btn-outline" onclick="closeAddCard()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAddCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Add Method</button>
+    </div>
+  </div>
+</div>
+
+<!-- FILTER PANEL -->
+<div class="filter-panel-overlay" id="filterPanelOverlay" onclick="if(event.target===this)closeFilterPanel()">
+  <div class="filter-panel">
+    <div class="fp-header"><h3>Filters</h3><button class="modal-close" onclick="closeFilterPanel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="fp-section">
+      <div class="fp-section-title">State</div>
+      <div class="state-select-wrap" id="stateSelectWrap">
+        <div class="state-select-input" onclick="toggleStateDD()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="stateSearchInput" placeholder="All states (50)" oninput="filterStatesDD()" onclick="event.stopPropagation();toggleStateDD()">
+        </div>
+        <div class="state-dd" id="stateDD">
+          <div class="state-dd-top"><button onclick="selectAllStates()">Select All</button><button onclick="clearAllStates()">Clear All</button></div>
+          <div id="stateOptsList"></div>
+        </div>
+        <div class="state-tags" id="stateTags"></div>
+      </div>
+    </div>
+    <div class="fp-section">
+      <div class="fp-section-title">Date Range</div>
+      <div class="dp-range-input" onclick="document.getElementById('dpBody').style.display=document.getElementById('dpBody').style.display==='none'?'block':'block'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span id="dpRangeDisplay">All dates</span></div>
+      <div id="dpBody">
+        <div class="dp-layout">
+          <div class="dp-presets">
+            <button class="dp-preset active" onclick="selectPreset('all',this)">All Dates</button>
+            <button class="dp-preset" onclick="selectPreset('today',this)">Today</button>
+            <button class="dp-preset" onclick="selectPreset('yesterday',this)">Yesterday</button>
+            <button class="dp-preset" onclick="selectPreset('thisweek',this)">This Week</button>
+            <button class="dp-preset" onclick="selectPreset('lastweek',this)">Last Week</button>
+            <button class="dp-preset" onclick="selectPreset('last7',this)">Last 7 Days</button>
+            <button class="dp-preset" onclick="selectPreset('last2weeks',this)">Last 2 Weeks</button>
+            <button class="dp-preset" onclick="selectPreset('thismonth',this)">This Month</button>
+            <button class="dp-preset" onclick="selectPreset('lastmonth',this)">Last Month</button>
+            <button class="dp-preset" onclick="selectPreset('last30',this)">Last 30 Days</button>
+            <button class="dp-preset" onclick="selectPreset('last2months',this)">Last 2 Months</button>
+            <button class="dp-preset" onclick="selectPreset('last3months',this)">Last 3 Months</button>
+            <button class="dp-preset" onclick="selectPreset('thisyear',this)">This Year</button>
+            <button class="dp-preset" onclick="selectPreset('lastyear',this)">Last Year</button>
+            <button class="dp-preset" onclick="selectPreset('custom',this)">Custom</button>
+          </div>
+          <div class="dp-calendars">
+            <div class="dp-cal-row">
+              <div class="dp-cal">
+                <div class="dp-cal-header"><button onclick="navCal(-1)">&lt;</button><span id="cal1Title">March 2026</span><span></span></div>
+                <div class="dp-cal-grid" id="cal1Grid"></div>
+              </div>
+              <div class="dp-cal">
+                <div class="dp-cal-header"><span></span><span id="cal2Title">April 2026</span><button onclick="navCal(1)">&gt;</button></div>
+                <div class="dp-cal-grid" id="cal2Grid"></div>
+              </div>
+            </div>
+            <div class="dp-footer">
+              <div class="dp-range-text" id="dpFooterRange">All dates</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fp-footer">
+      <button class="btn btn-outline" onclick="resetFilters()">Reset</button>
+      <button class="btn btn-primary" onclick="applyPanelFilters()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Apply Filters</button>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById("userEmail").textContent="thomas"+"@"+"geniuslaw.com";
+var SVG_CARD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/><path d="M6 16h4"/></svg>';
+var SVG_BANK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>';
+var SVG_STRIPE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7a2 2 0 012-2h16a2 2 0 012 2v2H2V7z"/><rect x="2" y="9" width="20" height="10" rx="1"/><path d="M6 15h4M14 15h4"/></svg>';
+var SVG_ADD='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+
+function toggleTheme(){var h=document.documentElement,d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'':'dark');document.getElementById('themeIcon').innerHTML=d?'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>':'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';}
+function switchTab(id,btn){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('tab-'+id).classList.add('active');}
+
+// FILTER PILLS - combined filtering
+var activeStatusFilter='all',activeFirmFilter='all',activeEntityFilter='all';
+var firmScopeOn=false,entityScopeOn=false;
+
+function filterTxn(status,btn){activeStatusFilter=status;activatePill('txnFilters',btn,status);applyAllFilters();}
+function activatePill(pillsId,btn,val){
+  var pills=document.getElementById(pillsId);pills.querySelectorAll('.filter-pill').forEach(function(p){p.classList.remove('active','active-success','active-failed','active-refunded','active-pending','active-scheduled','active-pastdue','active-cancelled')});
+  if(val==='all'){btn.classList.add('active')}else{var ac=btn.dataset.activeClass||'active';btn.classList.add(ac)}
+}
+
+// Toggle scope buttons
+function toggleFirmScope(){
+  firmScopeOn=!firmScopeOn;
+  document.getElementById('firmScopeBtn').classList.toggle('scope-active',firmScopeOn);
+  document.getElementById('firmCombo').classList.toggle('fsc-hidden',!firmScopeOn);
+  if(!firmScopeOn){activeFirmFilter='all';clearFirmFilter();}
+  applyAllFilters();
+}
+function toggleEntityScope(){
+  entityScopeOn=!entityScopeOn;
+  document.getElementById('entityScopeBtn').classList.toggle('scope-active',entityScopeOn);
+  document.getElementById('entityCombo').classList.toggle('fsc-hidden',!entityScopeOn);
+  if(!entityScopeOn){activeEntityFilter='all';clearEntityFilter();}
+  applyAllFilters();
+}
+// Firm filter dropdown
+function openFirmFilterDD(){document.getElementById('firmFilterDD').classList.add('open')}
+function filterFirmDropdown(){var q=document.getElementById('firmFilterInput').value.toLowerCase();document.querySelectorAll('#firmFilterDD .fsc-item').forEach(function(item){item.style.display=item.textContent.toLowerCase().indexOf(q)>=0?'':'none'});openFirmFilterDD()}
+function pickFirmFilter(val,label){
+  activeFirmFilter=val;
+  document.getElementById('firmFilterDD').classList.remove('open');
+  document.querySelectorAll('#firmFilterDD .fsc-item').forEach(function(i){i.classList.remove('active-item')});
+  event.currentTarget.classList.add('active-item');
+  if(val==='all'){document.getElementById('firmTag').classList.remove('visible');document.getElementById('firmComboInput').style.display='';document.getElementById('firmFilterInput').value='';document.getElementById('firmFilterInput').placeholder='All law firms';}
+  else{document.getElementById('firmTag').classList.add('visible');document.getElementById('firmTagText').textContent=label;document.getElementById('firmComboInput').style.display='none';}
+  applyAllFilters();
+}
+function clearFirmFilter(){activeFirmFilter='all';document.getElementById('firmTag').classList.remove('visible');document.getElementById('firmComboInput').style.display='';document.getElementById('firmFilterInput').value='';document.querySelectorAll('#firmFilterDD .fsc-item').forEach(function(i){i.classList.remove('active-item')});document.querySelector('#firmFilterDD .fsc-item').classList.add('active-item');applyAllFilters();}
+// Entity filter dropdown
+function openEntityFilterDD(){document.getElementById('entityFilterDD').classList.add('open')}
+function filterEntityDropdown(){var q=document.getElementById('entityFilterInput').value.toLowerCase();document.querySelectorAll('#entityFilterDD .fsc-item').forEach(function(item){item.style.display=item.textContent.toLowerCase().indexOf(q)>=0?'':'none'});openEntityFilterDD()}
+function pickEntityFilter(val,label){
+  activeEntityFilter=val;
+  document.getElementById('entityFilterDD').classList.remove('open');
+  document.querySelectorAll('#entityFilterDD .fsc-item').forEach(function(i){i.classList.remove('active-item')});
+  event.currentTarget.classList.add('active-item');
+  if(val==='all'){document.getElementById('entityTag').classList.remove('visible');document.getElementById('entityComboInput').style.display='';document.getElementById('entityFilterInput').value='';document.getElementById('entityFilterInput').placeholder='All entities';}
+  else{document.getElementById('entityTag').classList.add('visible');document.getElementById('entityTagText').textContent=label;document.getElementById('entityComboInput').style.display='none';}
+  applyAllFilters();
+}
+function clearEntityFilter(){activeEntityFilter='all';document.getElementById('entityTag').classList.remove('visible');document.getElementById('entityComboInput').style.display='';document.getElementById('entityFilterInput').value='';document.querySelectorAll('#entityFilterDD .fsc-item').forEach(function(i){i.classList.remove('active-item')});document.querySelector('#entityFilterDD .fsc-item').classList.add('active-item');applyAllFilters();}
+// Date & state filter state
+var activeDateStart=null,activeDateEnd=null,activeStates=[];
+var calViewMonth=2,calViewYear=2026; // March 2026
+var US_STATES=['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+var STATE_NAMES={'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California','CO':'Colorado','CT':'Connecticut','DE':'Delaware','FL':'Florida','GA':'Georgia','HI':'Hawaii','ID':'Idaho','IL':'Illinois','IN':'Indiana','IA':'Iowa','KS':'Kansas','KY':'Kentucky','LA':'Louisiana','ME':'Maine','MD':'Maryland','MA':'Massachusetts','MI':'Michigan','MN':'Minnesota','MS':'Mississippi','MO':'Missouri','MT':'Montana','NE':'Nebraska','NV':'Nevada','NH':'New Hampshire','NJ':'New Jersey','NM':'New Mexico','NY':'New York','NC':'North Carolina','ND':'North Dakota','OH':'Ohio','OK':'Oklahoma','OR':'Oregon','PA':'Pennsylvania','RI':'Rhode Island','SC':'South Carolina','SD':'South Dakota','TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont','VA':'Virginia','WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming'};
+
+function applyAllFilters(){
+  var total=0,count=0;
+  document.querySelectorAll('#txnTableBody tr').forEach(function(row){
+    var showStatus=activeStatusFilter==='all'||row.dataset.status===activeStatusFilter;
+    var showFirm=activeFirmFilter==='all'||row.dataset.firm===activeFirmFilter;
+    var showEntity=activeEntityFilter==='all'||row.dataset.entity===activeEntityFilter;
+    var showState=activeStates.length===0||activeStates.indexOf(row.dataset.state)>=0;
+    var showDate=true;
+    if(activeDateStart&&activeDateEnd){
+      var parts=row.children[0].textContent.trim().split(' ')[0].split('.');
+      var rd=new Date(parseInt(parts[2]),parseInt(parts[0])-1,parseInt(parts[1]));
+      showDate=rd>=activeDateStart&&rd<=activeDateEnd;
+    }
+    if(showStatus&&showFirm&&showEntity&&showState&&showDate){row.classList.remove('hidden-row');total+=parseFloat(row.dataset.amount||0);count++}else{row.classList.add('hidden-row')}
+  });
+  var labels={'all':'All Transactions','Completed':'Successful','Failed':'Declined','Refunded':'Refunded','Pending':'Pending','Scheduled':'Scheduled','Cancelled':'Cancelled'};
+  var colors={'all':'var(--text-primary)','Completed':'var(--green-500)','Failed':'var(--red-500)','Refunded':'var(--orange-500)','Pending':'#F4C430','Scheduled':'#a21caf','Cancelled':'var(--text-tertiary)'};
+  var sublabel=labels[activeStatusFilter]||'All Transactions';
+  var clr=colors[activeStatusFilter]||'var(--text-primary)';
+  document.getElementById('ftbSublabel').textContent=sublabel;
+  document.getElementById('ftbSublabel').style.color=clr;
+  document.getElementById('ftbValue').textContent='$'+total.toLocaleString('en-US',{minimumFractionDigits:2});
+  document.getElementById('ftbValue').style.color=clr;
+  document.getElementById('tfootTotal').textContent='$'+total.toLocaleString('en-US',{minimumFractionDigits:2});
+  updateFilterBadge();
+}
+function updateFilterBadge(){
+  var c=0;if(activeDateStart)c++;if(activeStates.length>0)c++;
+  var btn=document.getElementById('filterToggleBtn'),badge=document.getElementById('filterBadge');
+  if(c>0){btn.classList.add('has-filters');badge.textContent=c;badge.style.display='flex'}else{btn.classList.remove('has-filters');badge.style.display='none'}
+}
+
+// FILTER PANEL
+function openFilterPanel(){document.getElementById('filterPanelOverlay').classList.add('open');buildStateOptions();renderCalendars();}
+function closeFilterPanel(){document.getElementById('filterPanelOverlay').classList.remove('open')}
+function applyPanelFilters(){closeFilterPanel();applyAllFilters();}
+function resetFilters(){activeDateStart=null;activeDateEnd=null;activeStates=[];document.getElementById('dpRangeDisplay').textContent='All dates';document.getElementById('dpFooterRange').textContent='All dates';document.querySelectorAll('.dp-preset').forEach(function(p){p.classList.remove('active')});document.querySelector('.dp-preset').classList.add('active');document.getElementById('stateTags').innerHTML='';document.getElementById('stateSearchInput').placeholder='All states (50)';renderCalendars();buildStateOptions();applyAllFilters();}
+
+// DATE PICKER
+function selectPreset(preset,btn){
+  document.querySelectorAll('.dp-preset').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');
+  var now=new Date(2026,2,31),start,end;
+  switch(preset){
+    case 'all':activeDateStart=null;activeDateEnd=null;document.getElementById('dpRangeDisplay').textContent='All dates';document.getElementById('dpFooterRange').textContent='All dates';renderCalendars();return;
+    case 'today':start=end=new Date(now);break;
+    case 'yesterday':start=end=new Date(now.getTime()-86400000);break;
+    case 'thisweek':start=new Date(now);start.setDate(start.getDate()-start.getDay());end=new Date(now);break;
+    case 'last7':start=new Date(now.getTime()-6*86400000);end=new Date(now);break;
+    case 'lastweek':end=new Date(now);end.setDate(end.getDate()-end.getDay()-1);start=new Date(end);start.setDate(start.getDate()-6);break;
+    case 'last2weeks':start=new Date(now.getTime()-13*86400000);end=new Date(now);break;
+    case 'thismonth':start=new Date(now.getFullYear(),now.getMonth(),1);end=new Date(now);break;
+    case 'lastmonth':start=new Date(now.getFullYear(),now.getMonth()-1,1);end=new Date(now.getFullYear(),now.getMonth(),0);break;
+    case 'last30':start=new Date(now.getTime()-29*86400000);end=new Date(now);break;
+    case 'last2months':start=new Date(now.getFullYear(),now.getMonth()-2,now.getDate());end=new Date(now);break;
+    case 'last3months':start=new Date(now.getFullYear(),now.getMonth()-3,now.getDate());end=new Date(now);break;
+    case 'thisyear':start=new Date(now.getFullYear(),0,1);end=new Date(now);break;
+    case 'lastyear':start=new Date(now.getFullYear()-1,0,1);end=new Date(now.getFullYear()-1,11,31);break;
+    case 'custom':return;
+    default:return;
+  }
+  activeDateStart=new Date(start.getFullYear(),start.getMonth(),start.getDate());
+  activeDateEnd=new Date(end.getFullYear(),end.getMonth(),end.getDate());
+  updateDateDisplay();renderCalendars();
+}
+function updateDateDisplay(){
+  if(!activeDateStart||!activeDateEnd){document.getElementById('dpRangeDisplay').textContent='All dates';document.getElementById('dpFooterRange').textContent='All dates';return}
+  var fmt=function(d){return String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0')+'.'+d.getFullYear()};
+  var t=fmt(activeDateStart)+' - '+fmt(activeDateEnd);document.getElementById('dpRangeDisplay').textContent=t;document.getElementById('dpFooterRange').textContent=t;
+}
+function navCal(dir){calViewMonth+=dir;if(calViewMonth>11){calViewMonth=0;calViewYear++}if(calViewMonth<0){calViewMonth=11;calViewYear--}renderCalendars();}
+function renderCalendars(){
+  var m1=calViewMonth,y1=calViewYear,m2=calViewMonth+1,y2=calViewYear;if(m2>11){m2=0;y2++}
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal1Title').textContent=months[m1]+' '+y1;document.getElementById('cal2Title').textContent=months[m2]+' '+y2;
+  renderMonth('cal1Grid',y1,m1);renderMonth('cal2Grid',y2,m2);
+}
+function renderMonth(gridId,year,month){
+  var grid=document.getElementById(gridId);grid.innerHTML='';
+  var labels=['Mo','Tu','We','Th','Fr','Sa','Su'];labels.forEach(function(l){grid.insertAdjacentHTML('beforeend','<div class="dp-day-label">'+l+'</div>')});
+  var first=new Date(year,month,1),startDay=(first.getDay()+6)%7,daysInMonth=new Date(year,month+1,0).getDate();
+  var prevDays=new Date(year,month,0).getDate();
+  for(var i=startDay-1;i>=0;i--){grid.insertAdjacentHTML('beforeend','<div class="dp-day other-month">'+(prevDays-i)+'</div>')}
+  var today=new Date(2026,2,31);
+  for(var d=1;d<=daysInMonth;d++){
+    var dt=new Date(year,month,d),cls='dp-day';
+    if(dt.getFullYear()===today.getFullYear()&&dt.getMonth()===today.getMonth()&&dt.getDate()===today.getDate())cls+=' today';
+    if(activeDateStart&&activeDateEnd){if(dt.getTime()===activeDateStart.getTime())cls+=' range-start';if(dt.getTime()===activeDateEnd.getTime())cls+=' range-end';if(dt>activeDateStart&&dt<activeDateEnd)cls+=' in-range'}
+    grid.insertAdjacentHTML('beforeend','<div class="'+cls+'" onclick="pickDate('+year+','+month+','+d+')">'+d+'</div>');
+  }
+  var totalCells=startDay+daysInMonth,remaining=7-(totalCells%7);if(remaining<7)for(var r=1;r<=remaining;r++)grid.insertAdjacentHTML('beforeend','<div class="dp-day other-month">'+r+'</div>');
+}
+var dpClickCount=0;
+function pickDate(y,m,d){
+  dpClickCount++;var picked=new Date(y,m,d);
+  document.querySelectorAll('.dp-preset').forEach(function(p){p.classList.remove('active')});document.querySelector('.dp-preset:last-child').classList.add('active');
+  if(dpClickCount%2===1){activeDateStart=picked;activeDateEnd=picked}else{if(picked<activeDateStart){activeDateEnd=activeDateStart;activeDateStart=picked}else{activeDateEnd=picked}}
+  updateDateDisplay();renderCalendars();
+}
+
+// STATE MULTI-SELECT
+function buildStateOptions(){
+  var list=document.getElementById('stateOptsList');list.innerHTML='';
+  US_STATES.forEach(function(s){
+    var checked=activeStates.indexOf(s)>=0?'checked':'';
+    list.insertAdjacentHTML('beforeend','<label class="state-opt" id="sopt_'+s+'"><input type="checkbox" value="'+s+'" '+checked+' onchange="toggleState(\''+s+'\',this.checked)"><span>'+s+' - '+STATE_NAMES[s]+'</span></label>');
+  });
+}
+function filterStatesDD(){
+  var q=document.getElementById('stateSearchInput').value.toLowerCase();
+  document.querySelectorAll('.state-opt').forEach(function(opt){var t=opt.textContent.toLowerCase();opt.classList.toggle('hidden',t.indexOf(q)<0)});
+  document.getElementById('stateDD').classList.add('open');
+}
+function toggleStateDD(){document.getElementById('stateDD').classList.toggle('open')}
+function toggleState(s,checked){
+  if(checked){if(activeStates.indexOf(s)<0)activeStates.push(s)}else{activeStates=activeStates.filter(function(x){return x!==s})}
+  renderStateTags();
+}
+function selectAllStates(){activeStates=US_STATES.slice();buildStateOptions();renderStateTags();}
+function clearAllStates(){activeStates=[];buildStateOptions();renderStateTags();}
+function renderStateTags(){
+  var el=document.getElementById('stateTags');el.innerHTML='';
+  if(activeStates.length===0||activeStates.length===50){el.innerHTML='';document.getElementById('stateSearchInput').placeholder='All states (50)';return}
+  document.getElementById('stateSearchInput').placeholder=activeStates.length+' state'+(activeStates.length!==1?'s':'')+' selected';
+  activeStates.forEach(function(s){el.insertAdjacentHTML('beforeend','<span class="state-tag">'+s+'<button onclick="removeState(\''+s+'\')">&times;</button></span>')});
+}
+function removeState(s){activeStates=activeStates.filter(function(x){return x!==s});var cb=document.querySelector('#sopt_'+s+' input');if(cb)cb.checked=false;renderStateTags();}
+// Close state dropdown on outside click
+document.addEventListener('click',function(e){var w=document.getElementById('stateSelectWrap');if(w&&!w.contains(e.target))document.getElementById('stateDD').classList.remove('open')});
+
+var isScheduled=false;
+function toggleScheduled(val,btn){isScheduled=val;var btns=btn.parentElement.querySelectorAll('.yn-btn');btns.forEach(function(b){b.classList.remove('active-yes','active-no')});if(val)btns[0].classList.add('active-yes');else btns[1].classList.add('active-no');document.getElementById('scheduleDateSection').classList.toggle('visible',val);document.getElementById('processBtn').innerHTML=val?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Schedule Payment':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg> Process Payment';updateSummary();}
+
+var selectedFirmId='',selectedFirmName='';
+function openFirmDropdown(){document.getElementById('firmDropdown').classList.add('open')}
+function filterFirms(){var q=document.getElementById('firmSearchInput').value.toLowerCase();document.querySelectorAll('#firmDropdown .dropdown-item').forEach(function(item){item.style.display=item.textContent.toLowerCase().indexOf(q)>=0?'':'none'});openFirmDropdown()}
+function selectFirm(id,name,detail){selectedFirmId=id;selectedFirmName=name;document.getElementById('firmDropdown').classList.remove('open');document.getElementById('firmSearchInput').parentElement.parentElement.style.display='none';document.getElementById('selectedFirmCard').classList.add('visible');var abbr=name.split(' ').map(function(w){return w[0]}).join('').substring(0,3);document.getElementById('selectedFirmAvatar').textContent=abbr;document.getElementById('selectedFirmName').textContent=name;document.getElementById('selectedFirmDetail').textContent=detail;document.getElementById('firmAccountSection').style.display='block';updateSummary();}
+function clearFirm(){selectedFirmId='';selectedFirmName='';document.getElementById('selectedFirmCard').classList.remove('visible');document.getElementById('firmSearchInput').parentElement.parentElement.style.display='';document.getElementById('firmSearchInput').value='';document.getElementById('firmAccountSection').style.display='none';updateSummary();}
+function selectFirmAccount(el){document.querySelectorAll('.firm-account-card').forEach(function(c){c.classList.remove('active')});el.classList.add('active');updateSummary();}
+
+var clientOrders={'James Henderson':[{id:'FD-TX-00421',type:'Foreclosure Defense',caseType:'fd',amount:2500,balance:1500},{id:'EP-TX-00089',type:'Estate Planning',caseType:'ep',amount:1200,balance:1200}],'Gregory Mackey':[{id:'FD-FL-00287',type:'Foreclosure Defense',caseType:'fd',amount:3200,balance:2400}],'Claudia Muller':[{id:'FD-MA-00318',type:'Foreclosure Defense',caseType:'fd',amount:1800,balance:600}],'Ofelia Bukantz':[{id:'EP-FL-00105',type:'Estate Planning',caseType:'ep',amount:950,balance:475}],'Clint Douglas':[{id:'SSDI-TX-00042',type:'SSDI Claim',caseType:'ssdi',amount:1500,balance:375}],'Rosa Williams':[{id:'FD-CA-00519',type:'Foreclosure Defense',caseType:'fd',amount:2000,balance:0}]};
+var clientSavedMethods={'James Henderson':{card:[{label:'Visa ending in 4821',detail:'Expires 08/27',isDefault:true}],stripe:[],ecs:[{label:'Chase Checking ···6190',detail:'ACH / ECS',isDefault:false}]},'Gregory Mackey':{card:[{label:'Mastercard ending in 0091',detail:'Expires 11/26',isDefault:true}],stripe:[],ecs:[]},'Claudia Muller':{card:[],stripe:[{label:'Stripe - Visa ···3344',detail:'Expires 03/28',isDefault:true}],ecs:[{label:'BOA Checking ···7821',detail:'ACH / ECS',isDefault:false}]},'Ofelia Bukantz':{card:[{label:'Visa ending in 7742',detail:'Expires 05/27',isDefault:true}],stripe:[],ecs:[]},'Clint Douglas':{card:[],stripe:[],ecs:[{label:'Wells Fargo Checking ···0455',detail:'ACH / ECS',isDefault:true}]},'Rosa Williams':{card:[],stripe:[],ecs:[]}};
+var selectedClientName='',selectedOrderId='',selectedOrderData=null,activePmType='card';
+function openClientDropdown(){document.getElementById('clientDropdown').classList.add('open')}
+function filterClients(){var q=document.getElementById('clientSearchInput').value.toLowerCase();document.querySelectorAll('#clientDropdown .dropdown-item').forEach(function(item){item.style.display=item.textContent.toLowerCase().indexOf(q)>=0?'':'none'});openClientDropdown()}
+function selectClient(initials,name,email,state){selectedClientName=name;selectedOrderId='';selectedOrderData=null;document.getElementById('clientDropdown').classList.remove('open');document.getElementById('clientSearchInput').parentElement.parentElement.style.display='none';document.getElementById('selectedClientCard').classList.add('visible');document.getElementById('selectedAvatar').textContent=initials;document.getElementById('selectedName').textContent=name;document.getElementById('selectedEmail').textContent=email+' · '+state;document.getElementById('orderPlaceholder').style.display='none';document.getElementById('orderSection').classList.add('visible');populateOrderDropdown(name);document.getElementById('pmSelectClientHint').style.display='none';showPmCards();updateSummary();}
+function clearClient(){selectedClientName='';selectedOrderId='';selectedOrderData=null;document.getElementById('selectedClientCard').classList.remove('visible');document.getElementById('clientSearchInput').parentElement.parentElement.style.display='';document.getElementById('clientSearchInput').value='';document.getElementById('orderSection').classList.remove('visible');document.getElementById('orderPlaceholder').style.display='';document.getElementById('selectedOrderCard').classList.remove('visible');document.getElementById('orderSearchWrapper').style.display='';document.getElementById('pmCardsArea').style.display='none';document.getElementById('pmSelectClientHint').style.display='';document.getElementById('summaryContent').innerHTML='<div class="summary-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-tertiary);margin-bottom:8px"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg><br>Select a client and order<br>to see payment details</div>';}
+var orderIconSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>';
+function populateOrderDropdown(name){var list=document.getElementById('orderDropdownList');list.innerHTML='';(clientOrders[name]||[]).forEach(function(o){var ic=o.caseType==='ep'?'ep':o.caseType==='ssdi'?'ssdi':'fd';list.insertAdjacentHTML('beforeend','<div class="order-item" onclick="selectOrder(\''+o.id+'\')"><div class="oi-icon '+ic+'">'+orderIconSvg+'</div><div class="oi-info"><div class="oi-id">'+o.id+'</div><div class="oi-type">'+o.type+'</div></div><div class="oi-balance"><div class="oi-bal-label">Balance</div><div class="oi-bal-amount">$'+o.balance.toLocaleString('en-US',{minimumFractionDigits:2})+'</div></div></div>')});}
+function openOrderDropdown(){document.getElementById('orderDropdownList').classList.add('open')}
+function toggleOrderDropdown(){document.getElementById('orderDropdownList').classList.toggle('open')}
+function selectOrder(orderId){var o=(clientOrders[selectedClientName]||[]).find(function(x){return x.id===orderId});if(!o)return;selectedOrderId=orderId;selectedOrderData=o;document.getElementById('orderDropdownList').classList.remove('open');document.getElementById('orderSearchWrapper').style.display='none';document.getElementById('selectedOrderCard').classList.add('visible');var c={fd:'var(--blue-50)',ep:'var(--green-50)',ssdi:'var(--orange-50)'},tc={fd:'var(--blue-500)',ep:'var(--green-500)',ssdi:'var(--orange-500)'};document.getElementById('soIcon').style.background=c[o.caseType]||c.fd;document.getElementById('soIcon').style.color=tc[o.caseType]||tc.fd;document.getElementById('soId').textContent=o.id;document.getElementById('soType').textContent=o.type;document.getElementById('soBalance').textContent='Balance: $'+o.balance.toLocaleString('en-US',{minimumFractionDigits:2});updateSummary();}
+function clearOrder(){selectedOrderId='';selectedOrderData=null;document.getElementById('selectedOrderCard').classList.remove('visible');document.getElementById('orderSearchWrapper').style.display='';updateSummary();}
+function selectPmType(type,el){activePmType=type;document.querySelectorAll('.pm-card').forEach(function(c){c.classList.remove('active')});el.classList.add('active');if(selectedClientName)showPmCards();updateSummary();}
+function showPmCards(){if(!selectedClientName)return;var methods=(clientSavedMethods[selectedClientName]||{})[activePmType]||[];var area=document.getElementById('pmCardsArea');var c=document.getElementById('savedMethodCards');c.innerHTML='';area.style.display='block';var icon=activePmType==='ecs'?SVG_BANK:activePmType==='stripe'?SVG_STRIPE:SVG_CARD;var labels={card:'Credit cards on file',stripe:'Stripe methods on file',ecs:'ECS / Bank accounts on file'};document.getElementById('pmCardsLabel').textContent=labels[activePmType]||'Methods on file';if(methods.length>0){methods.forEach(function(m,i){c.insertAdjacentHTML('beforeend','<div class="saved-method-card'+(i===0?' active':'')+'" onclick="selectSavedMethod(this)"><div class="sm-icon">'+icon+'</div><div class="sm-info"><div class="sm-label">'+m.label+'</div><div class="sm-detail">'+m.detail+'</div></div>'+(m.isDefault?'<div class="sm-default">Default</div>':'')+'<div class="sm-radio">'+(i===0?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</div></div>')})}else{c.insertAdjacentHTML('beforeend','<div style="padding:14px;text-align:center;color:var(--text-tertiary);font-size:12px;border:1px dashed var(--border);border-radius:10px">No saved methods for this type</div>')}c.insertAdjacentHTML('beforeend','<div class="saved-method-card'+(methods.length===0?' active':'')+'" onclick="openAddCardModal()"><div class="sm-icon" style="color:var(--blue-500)">'+SVG_ADD+'</div><div class="sm-info"><div class="sm-label" style="color:var(--blue-500)">Add new '+(activePmType==='card'?'credit card':activePmType==='stripe'?'Stripe method':'bank account')+'</div><div class="sm-detail">Enter new payment details</div></div><div class="sm-radio">'+(methods.length===0?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</div></div>')}
+function selectSavedMethod(el){document.querySelectorAll('.saved-method-card').forEach(function(c){c.classList.remove('active');c.querySelector('.sm-radio').innerHTML=''});el.classList.add('active');el.querySelector('.sm-radio').innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';updateSummary();}
+function updateSummary(){var amount=document.getElementById('paymentAmount').value;if(!selectedClientName)return;var activeAcct=document.querySelector('.firm-account-card.active');var acctName=activeAcct?activeAcct.querySelector('.fa-name').textContent:'--';if(!selectedOrderData){document.getElementById('summaryContent').innerHTML='<div class="summary-row"><span class="label">Client</span><span class="value">'+selectedClientName+'</span></div>'+(selectedFirmName?'<div class="summary-row"><span class="label">Law Firm</span><span class="value">'+selectedFirmName+'</span></div><div class="summary-row"><span class="label">Account</span><span class="value">'+acctName+'</span></div>':'')+'<div class="summary-placeholder" style="padding:20px 0">Select an order to continue</div>';return}var balance=selectedOrderData.balance,totalOrder=selectedOrderData.amount,payAmt=parseFloat(amount)||0,newBalance=Math.max(0,balance-payAmt);var schedHtml='';if(isScheduled){var dt=document.getElementById('scheduledDate').value,freq=document.getElementById('scheduleFrequency').value,count=document.getElementById('scheduleCount').value,fl={'one-time':'One-time','weekly':'Weekly','bi-weekly':'Bi-weekly','monthly':'Monthly'};schedHtml='<div class="summary-row"><span class="label">Type</span><span class="value" style="color:var(--blue-500)">Scheduled</span></div>'+(dt?'<div class="summary-row"><span class="label">Start Date</span><span class="value">'+new Date(dt+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+'</span></div>':'')+'<div class="summary-row"><span class="label">Frequency</span><span class="value">'+(fl[freq]||freq)+'</span></div><div class="summary-row"><span class="label"># Payments</span><span class="value">'+count+'</span></div>'}else{schedHtml='<div class="summary-row"><span class="label">Type</span><span class="value">Immediate</span></div>'}var pmLabel='--';var as=document.querySelector('.saved-method-card.active');if(as){pmLabel=as.dataset.new?'New '+activePmType:as.querySelector('.sm-label').textContent}document.getElementById('summaryContent').innerHTML='<div class="summary-row"><span class="label">Client</span><span class="value">'+selectedClientName+'</span></div>'+(selectedFirmName?'<div class="summary-row"><span class="label">Law Firm</span><span class="value">'+selectedFirmName+'</span></div><div class="summary-row"><span class="label">Account</span><span class="value">'+acctName+'</span></div>':'')+'<div class="summary-row"><span class="label">Order</span><span class="value">'+selectedOrderId+'</span></div><div class="summary-row"><span class="label">Order Total</span><span class="value">$'+totalOrder.toLocaleString('en-US',{minimumFractionDigits:2})+'</span></div><div class="summary-row"><span class="label">Balance</span><span class="value">$'+balance.toLocaleString('en-US',{minimumFractionDigits:2})+'</span></div>'+schedHtml+'<div class="summary-row"><span class="label">Method</span><span class="value">'+pmLabel+'</span></div><div class="summary-row total"><span class="label">Payment</span><span class="value">$'+payAmt.toLocaleString('en-US',{minimumFractionDigits:2})+'</span></div><div class="summary-row"><span class="label">New Balance</span><span class="value" style="color:'+(newBalance===0?'var(--green-500)':'inherit')+'">$'+newBalance.toLocaleString('en-US',{minimumFractionDigits:2})+'</span></div>';}
+document.addEventListener('click',function(e){var w=document.getElementById('clientSearch');if(w&&!w.contains(e.target))document.getElementById('clientDropdown').classList.remove('open');var ow=document.getElementById('orderSearchWrapper');if(ow&&!ow.contains(e.target))document.getElementById('orderDropdownList').classList.remove('open');var fw=document.getElementById('firmSearch');if(fw&&!fw.contains(e.target))document.getElementById('firmDropdown').classList.remove('open');var fc=document.getElementById('firmCombo');if(fc&&!fc.contains(e.target))document.getElementById('firmFilterDD').classList.remove('open');var ec=document.getElementById('entityCombo');if(ec&&!ec.contains(e.target))document.getElementById('entityFilterDD').classList.remove('open')});
+function openTxnModal(txnId,client,initials,email,order,amount,method,status,date,firm,account){document.getElementById('mdTxnId').textContent=txnId;var bm={'Completed':'badge-success','Pending':'badge-pending','Failed':'badge-failed','Refunded':'badge-refunded','Past Due':'badge-failed','Due Today':'badge-due-today','Scheduled':'badge-scheduled','Voided':'badge-voided','Cancelled':'badge-cancelled'};document.getElementById('mdStatus').innerHTML='<span class="badge '+(bm[status]||'badge-pending')+'">'+status+'</span>';document.getElementById('mdClient').textContent=client;document.getElementById('mdEmail').textContent=email;document.getElementById('mdOrder').textContent=order;document.getElementById('mdDate').textContent=date;document.getElementById('mdAmount').textContent=amount;document.getElementById('mdMethod').textContent=method;document.getElementById('mdFirm').textContent=firm;document.getElementById('mdAccount').textContent=account;var br=document.getElementById('btnRefund'),bv=document.getElementById('btnVoid');if(status==='Completed'){br.style.display='';bv.style.display=''}else if(status==='Pending'||status==='Scheduled'||status==='Due Today'){br.style.display='none';bv.style.display=''}else{br.style.display='none';bv.style.display='none'}document.getElementById('txnModal').classList.add('open')}
+function closeModal(){document.getElementById('txnModal').classList.remove('open')}
+function doRefund(){document.getElementById('mdStatus').innerHTML='<span class="badge badge-refunded">Refunded</span>';document.getElementById('btnRefund').style.display='none';document.getElementById('btnVoid').style.display='none'}
+function doVoid(){document.getElementById('mdStatus').innerHTML='<span class="badge badge-voided">Voided</span>';document.getElementById('btnRefund').style.display='none';document.getElementById('btnVoid').style.display='none'}
+
+// ADD PAYMENT METHOD MODAL
+function openAddCardModal(){
+  var titles={card:'Add Credit Card',stripe:'Add Stripe Method',ecs:'Add Bank Account'};
+  var subtitles={card:'Enter card details for this client',stripe:'Connect a Stripe payment method',ecs:'Enter bank account details for ECS'};
+  document.getElementById('addCardTitle').textContent=titles[activePmType]||'Add Payment Method';
+  document.getElementById('addCardSubtitle').textContent=subtitles[activePmType]||'Enter payment details';
+  var iconHtml=activePmType==='ecs'?SVG_BANK:activePmType==='stripe'?SVG_STRIPE:SVG_CARD;
+  document.getElementById('addCardIcon').innerHTML=iconHtml;
+  // Show/hide relevant fields
+  var isBank=activePmType==='ecs';
+  document.getElementById('cardFields').style.display=isBank?'none':'block';
+  document.getElementById('bankFields').style.display=isBank?'block':'none';
+  document.getElementById('cardVisual').style.display=isBank?'none':'block';
+  // Reset fields
+  var inputs=document.querySelectorAll('#addCardModal input[type=text]');inputs.forEach(function(i){i.value=''});
+  document.getElementById('cvNumber').textContent='.... .... .... ....';
+  document.getElementById('cvName').textContent=selectedClientName||'CLIENT NAME';
+  document.getElementById('cvExpiry').textContent='MM/YY';
+  document.getElementById('addCardModal').classList.add('open');
+}
+function closeAddCard(){document.getElementById('addCardModal').classList.remove('open')}
+function formatCardNumber(el){var v=el.value.replace(/\D/g,'').substring(0,16);var formatted=v.replace(/(.{4})/g,'$1 ').trim();el.value=formatted;document.getElementById('cvNumber').textContent=formatted||'.... .... .... ....';}
+function formatExpiry(el){var v=el.value.replace(/\D/g,'').substring(0,4);if(v.length>=3)v=v.substring(0,2)+'/'+v.substring(2);el.value=v;document.getElementById('cvExpiry').textContent=v||'MM/YY';}
+function updateCardVisual(){var name=document.getElementById('newCardName').value;document.getElementById('cvName').textContent=name.toUpperCase()||selectedClientName||'CLIENT NAME';}
+function confirmAddCard(){
+  // Mock: just show a success state and close
+  var last4=document.getElementById('newCardNumber')?document.getElementById('newCardNumber').value.replace(/\s/g,'').slice(-4):'';
+  closeAddCard();
+  // Add the new method to the list visually
+  if(last4||activePmType==='ecs'){
+    var icon=activePmType==='ecs'?SVG_BANK:activePmType==='stripe'?SVG_STRIPE:SVG_CARD;
+    var label=activePmType==='ecs'?'New Bank Account':'New card ending in '+last4;
+    var c=document.getElementById('savedMethodCards');
+    // Deselect all
+    c.querySelectorAll('.saved-method-card').forEach(function(card){card.classList.remove('active');var r=card.querySelector('.sm-radio');if(r)r.innerHTML=''});
+    // Insert before the "Add new" button
+    var addBtn=c.querySelector('[onclick="openAddCardModal()"]');
+    var newCard=document.createElement('div');
+    newCard.className='saved-method-card active';
+    newCard.setAttribute('onclick','selectSavedMethod(this)');
+    newCard.innerHTML='<div class="sm-icon">'+icon+'</div><div class="sm-info"><div class="sm-label">'+label+'</div><div class="sm-detail">Just added</div></div><div class="sm-default" style="background:var(--green-50);color:var(--green-500)">New</div><div class="sm-radio"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>';
+    c.insertBefore(newCard,addBtn);
+    updateSummary();
+  }
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal();closeAddCard();closeFilterPanel()}});
+</script>
+</body></html>
